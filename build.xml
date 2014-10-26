@@ -1,0 +1,18 @@
+<project default="compile">
+
+    <target name="compile">
+    	<mkdir dir="bin"/>
+        <javac srcdir="src" destdir="bin"/>
+    </target>
+
+    <target name="build-jar">
+		<jar destfile="bin/jfreetype.jar"
+		     basedir="bin" >
+		 </jar>
+	</target>
+
+	<target name="clean">
+		 <Delete dir="bin"/>
+	</target>
+
+</project>
