@@ -32,7 +32,7 @@ public class FreeType {
 		String str = "";
 		for (int y = 0; y < bitmap.height; y++) {
 			for (int x = 0; x < bitmap.width; x++) {
-				byte value = bitmap.pixels[x + y * bitmap.width];
+				byte value = bitmap.pixels.get(x + y * bitmap.width);
 
 				char print = value == 0 ? '-' : ' ';
 				str += print;

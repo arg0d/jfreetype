@@ -16,18 +16,13 @@ extern "C" JNIEXPORT jobject JNICALL Java_com_cig_jfreetype_FreeType_render(JNIE
 
 	jfieldID fieldWidth = env->GetFieldID(bitmapClass, "width", "I");
 	jfieldID fieldHeight = env->GetFieldID(bitmapClass, "height", "I");
-	jfieldID fieldPixels = env->GetFieldID(bitmapClass, "pixels", "[B");
+	jfieldID fieldPixels = env->GetFieldID(bitmapClass, "pixels", "Ljava/nio/ByteBuffer;");
 
 	env->SetIntField(javaBitmap, fieldWidth, (jint) bitmap->width);
-	env->SetIntField(javaBitmap, fieldHeight, (jint) bitmap->height);
+	env->SetIntField(javaBitmap, fieldHeight, (jint) bitmap->height);	
 
-	int size = bitmap->width * bitmap->height;
-	jbyte temp[size];
-	for (int i = 0; i < size; i++) {
-		temp[i] = (jbyte) *(bitmap->pixels + i);
-	}
-	jbyteArray buffer = env->NewByteArray(size);
-	env->SetByteArrayRegion(buffer, 0, size, temp);
+
+	jobject buffer = env->NewDirectByteBuffer((void*) bitmap->pixels, bitmap->width * bitmap->height);
 	env->SetObjectField(javaBitmap, fieldPixels, buffer);
 
 	env->DeleteLocalRef(bitmapClass);
