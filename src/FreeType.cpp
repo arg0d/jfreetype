@@ -1,13 +1,13 @@
-#include "jni.h"
+#include "jnihelper.cpp"
 #include "TextRenderer.cpp"
 
 using namespace std;
 
-extern "C" JNIEXPORT jobject JNICALL Java_com_cig_jfreetype_FreeType_render(JNIEnv *env, jobject obj, jstring str, jfloat scale)
+extern "C" JNIEXPORT jobject JNICALL Java_com_cig_jfreetype_FreeType_render(JNIEnv *env, jobject obj, jstring strFont, jstring strText, jfloat size, jint renderMode)
 {
-
-	Bitmap *bitmap = TextRenderer::instance->Render("Coming down town!", 0.25f);
-	delete TextRenderer::instance;
+	std::string font = JNIHelper::GetString(env, strFont);
+	std::string text = JNIHelper::GetString(env, strText);
+	Bitmap *bitmap = TextRenderer::instance->Render(font, text, (float) size, renderMode);
 
 	jclass bitmapClass = env->FindClass("com/cig/jfreetype/Bitmap");
 
@@ -18,14 +18,20 @@ extern "C" JNIEXPORT jobject JNICALL Java_com_cig_jfreetype_FreeType_render(JNIE
 	jfieldID fieldHeight = env->GetFieldID(bitmapClass, "height", "I");
 	jfieldID fieldPixels = env->GetFieldID(bitmapClass, "pixels", "Ljava/nio/ByteBuffer;");
 
-	env->SetIntField(javaBitmap, fieldWidth, (jint) bitmap->width);
-	env->SetIntField(javaBitmap, fieldHeight, (jint) bitmap->height);	
+	int width = bitmap->width;
+	int height = bitmap->height;
 
+	env->SetIntField(javaBitmap, fieldWidth, (jint) width);
+	env->SetIntField(javaBitmap, fieldHeight, (jint) height);	
 
-	jobject buffer = env->NewDirectByteBuffer((void*) bitmap->pixels, bitmap->width * bitmap->height);
+	int length = width * height; 
+	char * temp = new char[length];
+	memcpy(temp, bitmap->pixels, length);
+	jobject buffer = env->NewDirectByteBuffer(temp, length);
 	env->SetObjectField(javaBitmap, fieldPixels, buffer);
 
 	env->DeleteLocalRef(bitmapClass);
+	delete bitmap;
 
 	return javaBitmap;
 }

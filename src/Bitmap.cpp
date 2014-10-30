@@ -3,8 +3,7 @@
 #include FT_FREETYPE_H
 
 #define BITMAP_TYPE_UNSUPPORTED 1
-#define BITMAP_TYPE_MONO 2
-#define BITMAP_TYPE_GRAY 3
+#define BITMAP_TYPE_GRAY 2 // 8-bit single color component color format
 
 class Bitmap {
 public:
@@ -18,7 +17,7 @@ public:
 
 	void Draw(FT_Bitmap &bitmap, int xp, int yp);
 
-	int getMaxY() { return yMax; }
+	int GetMaxY() { return yMax; }
 
 	static int TypeFromFTBitmapType(char ft_type);
 
@@ -47,6 +46,11 @@ Bitmap::Bitmap(int width, int height, int type)
 	}
 }
 
+Bitmap::~Bitmap()
+{
+	delete pixels;
+}
+
 void Bitmap::Draw(FT_Bitmap &bitmap, int xp, int yp)
 {
 	yMax = std::max(yMax, bitmap.rows + yp);
@@ -54,12 +58,12 @@ void Bitmap::Draw(FT_Bitmap &bitmap, int xp, int yp)
 		yMax = this->height;
 	}
 
-	if (this->type == BITMAP_TYPE_MONO) {
+	if (bitmap.pixel_mode == FT_PIXEL_MODE_MONO) {
 		// Mono bitmaps are packed in some interesting way, to unpack it, this tutorial was used.
 		// http://dbader.org/blog/monochrome-font-rendering-with-freetype-and-python
 
 		// first, unpack into 8-bit color gray color
-		char * buffer = new char[bitmap.width * bitmap.rows];
+		char buffer[bitmap.width * bitmap.rows];
 
 		for ( int y = 0; y < bitmap.rows; y++ ) {
 			for ( int byte_index = 0; byte_index < bitmap.pitch; byte_index++ ) {
@@ -82,7 +86,7 @@ void Bitmap::Draw(FT_Bitmap &bitmap, int xp, int yp)
 		// draw just like BITMAP_TYPE_GRAY
 		Draw8Bit(buffer, bitmap.width, bitmap.rows, xp, yp);		
 
-	} else if (this->type == BITMAP_TYPE_GRAY) {
+	} else if (bitmap.pixel_mode == FT_PIXEL_MODE_GRAY) {
 		// single 8-bit color
 		Draw8Bit((char*) bitmap.buffer, bitmap.width, bitmap.rows, xp, yp);
 
@@ -116,9 +120,6 @@ int Bitmap::TypeFromFTBitmapType(char ft_type)
 {
 	if (ft_type == FT_PIXEL_MODE_NONE) {
 		return 0;
-
-	} else if (ft_type == FT_PIXEL_MODE_MONO) {
-		return BITMAP_TYPE_MONO;
 
 	} else if (ft_type == FT_PIXEL_MODE_GRAY) {
 		return BITMAP_TYPE_GRAY;

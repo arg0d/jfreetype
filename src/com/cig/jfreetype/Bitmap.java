@@ -9,7 +9,6 @@ public class Bitmap {
 
 	public int width;
 	public int height;
-	/** The buffer must be disposed, or it will cause memory leaks!*/
 	public ByteBuffer pixels;
 	public int format;
 }

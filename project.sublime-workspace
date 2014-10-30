@@ -4,6 +4,14 @@
 		"selected_items":
 		[
 			[
+				"FT_RENDER_MODE",
+				"FT_RENDER_MODE_MONO"
+			],
+			[
+				"bitm",
+				"bitmap"
+			],
+			[
 				"bitmap",
 				"bitmapClass"
 			],
@@ -14,10 +22,6 @@
 			[
 				"java",
 				"javaBitmap"
-			],
-			[
-				"bitm",
-				"bitmapClass"
 			],
 			[
 				"bitmp",
@@ -43,6 +47,62 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "Makefile",
+			"settings":
+			{
+				"buffer_size": 336,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "build.xml",
+			"settings":
+			{
+				"buffer_size": 381,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/com/cig/jfreetype/FreeType.java",
+			"settings":
+			{
+				"buffer_size": 822,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/FreeType.cpp",
+			"settings":
+			{
+				"buffer_size": 1355,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Vector2.h",
+			"settings":
+			{
+				"buffer_size": 194,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Bitmap.cpp",
+			"settings":
+			{
+				"buffer_size": 2949,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/TextRenderer.cpp",
+			"settings":
+			{
+				"buffer_size": 3507,
+				"line_ending": "Windows"
+			}
+		}
 	],
 	"build_system": "",
 	"command_palette":
@@ -68,6 +128,12 @@
 	},
 	"file_history":
 	[
+		"/C/Users/Work/Desktop/jfreetype/src/TextRenderer.cpp",
+		"/C/Users/Work/Desktop/jfreetype/src/Manifest.h",
+		"/C/Users/Work/Desktop/jfreetype/src/com/cig/jfreetype/Bitmap.java",
+		"/C/Users/Work/Desktop/jfreetype/src/Bitmap.cpp",
+		"/C/Users/Work/Desktop/jfreetype/src/jnihelper.cpp",
+		"/C/Users/Work/Desktop/jfreetype/src/Bitmap.java",
 		"/C/Users/Work/Desktop/JavaFreeType binding/hs_err_pid3488.log",
 		"/C/Users/Work/Desktop/JavaFreeType binding/build.xml",
 		"/C/Users/Work/AppData/Roaming/Sublime Text 2/Packages/User/Preferences.sublime-settings",
@@ -119,6 +185,7 @@
 		"height": 0.0,
 		"where_history":
 		[
+			""
 		]
 	},
 	"find_state":
@@ -126,6 +193,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"cout <<",
+			"RenderChar",
 			"\n        ",
 			"        <",
 			"\"/>\n",
@@ -174,8 +243,195 @@
 	"groups":
 	[
 		{
+			"selected": 6,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "Makefile",
+					"settings":
+					{
+						"buffer_size": 336,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								201,
+								201
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Makefile/Makefile.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "build.xml",
+					"settings":
+					{
+						"buffer_size": 381,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								381,
+								381
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/XML/XML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/com/cig/jfreetype/FreeType.java",
+					"settings":
+					{
+						"buffer_size": 822,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								118,
+								118
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Java/Java.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/FreeType.cpp",
+					"settings":
+					{
+						"buffer_size": 1355,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								944,
+								944
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/Vector2.h",
+					"settings":
+					{
+						"buffer_size": 194,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								53,
+								53
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "src/Bitmap.cpp",
+					"settings":
+					{
+						"buffer_size": 2949,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								385,
+								385
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "src/TextRenderer.cpp",
+					"settings":
+					{
+						"buffer_size": 3507,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2707,
+								2707
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 240.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
 			]
 		}
 	],
@@ -221,8 +477,52 @@
 		"selected_items":
 		[
 			[
+				"textrend",
+				"src/TextRenderer.cpp"
+			],
+			[
+				"manifest.h",
+				"src/Manifest.h"
+			],
+			[
+				"bitmap.cpp",
+				"src/Bitmap.cpp"
+			],
+			[
+				"bitmap",
+				"src/Bitmap.cpp"
+			],
+			[
+				"textrenderer",
+				"src/TextRenderer.cpp"
+			],
+			[
+				"manifest",
+				"src/Manifest.h"
+			],
+			[
+				"bitmap.java",
+				"src/com/cig/jfreetype/Bitmap.java"
+			],
+			[
+				"textren",
+				"src/TextRenderer.cpp"
+			],
+			[
 				"freetype.cpp",
-				"FreeType.cpp"
+				"src/FreeType.cpp"
+			],
+			[
+				"freetype.java",
+				"src/FreeType.java"
+			],
+			[
+				"build.xml",
+				"build.xml"
+			],
+			[
+				"makefile",
+				"Makefile"
 			]
 		],
 		"width": 0.0

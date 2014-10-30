@@ -13,68 +13,83 @@ public:
 	/* Singleton */
 	static TextRenderer *instance;
 	
-	Bitmap* Render(const std::string& text, float scale);
+	Bitmap* Render(const std::string &font, const std::string &text, float size, int renderMode);
+
 private:
 	
-	void PrintBitmap(Bitmap * bitmap);
-	Bitmap* RenderChar(FT_Face, int charCode);
-	Bitmap* RenderString(FT_Face face, const std::string& str);
+	class TextMetrics {
+	public:
+		TextMetrics(int width = 0, int height = 0, int base_line = 0);
+
+		int width, height, base_line;
+	};
+
+	static FT_Render_Mode GetFTRenderMode(int renderMode);
+
+	Bitmap* RenderString(FT_Face face, const std::string& str, FT_Render_Mode renderModeFT);
 	
+	TextMetrics Meassure(FT_Face face, const std::string &string);
+
+	FT_Library library;
+	FT_Face m_Face;
+
 };
 
 TextRenderer* TextRenderer::instance = new TextRenderer();
 
-Bitmap* TextRenderer::Render(const std::string& text, float scale)
+TextRenderer::TextMetrics::TextMetrics(int width, int height, int base_line)
 {
-	FT_Library  library;
+	this->width = width;
+	this->height = height;
+	this->base_line = base_line;
+}
+
+Bitmap* TextRenderer::Render(const std::string& font, const std::string& text, float size, int renderMode)
+{
 	FT_Face face;
 	int error = 0;
-	
-	error = FT_Init_FreeType( &library );
-	if ( error )
-	{
-	
+
+	if (library == NULL) {
+		error = FT_Init_FreeType( &library );
+		if ( error )
+		{
+			std::cout << "Could no intialize library" << std::endl;
+			return NULL;
+		}
 	}
 	
-	error = FT_New_Face( library, "C:/Windows/Fonts/Arial.ttf", 0, &face );
-	if (error) {
-		std::cout << "Could not load face!" << std::endl;
-		return NULL;
+	if (m_Face == NULL) {
+		error = FT_New_Face( library, font.c_str(), 0, &face );
+		if (error) {
+			std::cout << "Could not load face!" << std::endl;
+			return NULL;
+		}
+		m_Face = face;
+	} else {
+		face = m_Face;
 	}
 	
 	error = FT_Set_Char_Size(
             face,    /* handle to face object           */
             0,       /* char_width in 1/64th of points  */
-            16*64 * scale,   /* char_height in 1/64th of points */
-            300,     /* horizontal device resolution    */
-            300 );   /* vertical device resolution      */
+            size * 64,   /* char_height in 1/64th of points */
+            72,     /* horizontal device resolution    */
+            72 );   /* vertical device resolution      */
 	if (error) {
 		std::cout << "Could not set char size!" << std::endl;
 		return NULL;
 	}
 	
-	
-	return RenderString(face, text);
+	return RenderString(face, text, GetFTRenderMode(renderMode));
 
 }
 
-Bitmap* TextRenderer::RenderString(FT_Face face, const std::string& str)
+Bitmap* TextRenderer::RenderString(FT_Face face, const std::string& str, FT_Render_Mode renderModeFT)
 {
 	int error = 0;
 
-	long glyph_index = FT_Get_Char_Index( face, (int) 'W');
-	error = FT_Load_Glyph(
-            face,          /* handle to face object */
-            glyph_index,   /* glyph index           */
-            0 );  /* load flags, see below */
-	if (error) {
-		std::cout << "Could not load glyph!" << std::endl;
-		return NULL;
-	}
-
-	int h = face->glyph->metrics.height >> 6;
-	
-	Bitmap *bitmap = new Bitmap(139, h * 1.5, BITMAP_TYPE_MONO);
+	TextMetrics metrics = Meassure(face, str);
+	Bitmap *bitmap = new Bitmap(metrics.width, metrics.height, BITMAP_TYPE_GRAY);
 
 	int x_pen = 0;
 
@@ -91,68 +106,74 @@ Bitmap* TextRenderer::RenderString(FT_Face face, const std::string& str)
 		}
 		
 		error = FT_Render_Glyph( face->glyph,   /* glyph slot  */
-	                           FT_RENDER_MODE_MONO ); /* render mode */
+	                           	renderModeFT ); /* render mode */
 		if (error) {
 			std::cout << "Could not render glyph!" << std::endl;
 			continue;
 		}
 
-		bool scalable = FT_IS_SCALABLE(face);
-		Log("Height: %d", face->glyph->bitmap_top);
-		bitmap->Draw(face->glyph->bitmap, x_pen, h -  face->glyph->bitmap_top);
+		int h = face->glyph->metrics.height >> 6;
+		int descender = h - (h + face->glyph->metrics.horiBearingY >> 6);
+		
+		bitmap->Draw(face->glyph->bitmap, x_pen, metrics.base_line - h + descender);
 
 		x_pen += face->glyph->advance.x >> 6;
-	}
 
-	PrintBitmap(bitmap);
+	}
 
 	return bitmap;
 }
 
-void TextRenderer::PrintBitmap(Bitmap * bitmap)
+TextRenderer::TextMetrics TextRenderer::Meassure(FT_Face face, const std::string &string)
 {
-	char * pixels = bitmap->pixels;
-	
-	int width = bitmap->width;
-	int height = bitmap->getMaxY();
-	
-	//std::cout << "width: " << width << ";  height: " << height << endl;
-	
-	for ( int y = 0; y < height; y++ ) {
-		for ( int x = 0; x < width; x++ ) {
-			char val = *(pixels + (x + y * width));
-			
-			char print = val == 0 ? ' ' : '#';
-			cout << print; 
+	if (m_Face == NULL) {
+		return TextMetrics();
+	}
+
+	int width = 0;
+	int height = 0;
+	int base_line = 0;
+
+	for (int i = 0; i < string.length(); i++) {
+		long glyph_index = FT_Get_Char_Index(face, (int) string.at(i));
+
+		if (glyph_index == 0) {
+			return TextMetrics();
 		}
-		
-		cout << endl; 
+
+		int error = FT_Load_Glyph(
+		            face,          /* handle to face object */
+		            glyph_index,   /* glyph index           */
+		            0 );  /* load flags, see below */
+		if (error) {
+			std::cout << "Could not load glyph!" << std::endl;
+			return TextMetrics();
+		}
+
+		width += face->glyph->advance.x >> 6;
+
+		int h = face->glyph->metrics.height >> 6;
+		int descender = h - (h + face->glyph->metrics.horiBearingY >> 6);
+
+		base_line = std::max(base_line, h - descender);
+		height = std::max(height, h + descender);
 	}
+
+	return TextMetrics(width, height, base_line);
+	
 }
 
-Bitmap* TextRenderer::RenderChar(FT_Face face, int charCode)
+FT_Render_Mode TextRenderer::GetFTRenderMode(int renderMode)
 {
-	int error = 0;
-	
-	long glyph_index = FT_Get_Char_Index( face, charCode);
-	
-	error = FT_Load_Glyph(
-            face,          /* handle to face object */
-            glyph_index,   /* glyph index           */
-            0 );  /* load flags, see below */
-	if (error) {
-		std::cout << "Could not load glyph!" << std::endl;
-		return NULL;
-	}
-	
-	error = FT_Render_Glyph( face->glyph,   /* glyph slot  */
-                           FT_RENDER_MODE_MONO ); /* render mode */
-	if (error) {
-		std::cout << "Could not render glyph!" << std::endl;
-		return NULL;
-	}
-	
-	Bitmap *bitmap = new Bitmap(face->glyph->bitmap.width, face->glyph->bitmap.rows, Bitmap::TypeFromFTBitmapType(face->glyph->bitmap.pixel_mode));
-	bitmap->Draw(face->glyph->bitmap, 0, 0);
-	return bitmap;
+	switch (renderMode) {
+
+		case 1:
+			return FT_RENDER_MODE_MONO;	
+
+		case 2:
+			return FT_RENDER_MODE_NORMAL;
+
+		default:
+			return FT_RENDER_MODE_MONO;
+	}	
 }
