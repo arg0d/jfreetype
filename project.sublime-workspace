@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"inc",
+				"include"
+			],
+			[
 				"FT_RENDER_MODE",
 				"FT_RENDER_MODE_MONO"
 			],
@@ -51,23 +55,15 @@
 			"file": "Makefile",
 			"settings":
 			{
-				"buffer_size": 336,
+				"buffer_size": 486,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "build.xml",
+			"file": "src/com/cig/jfreetype/JFreeType.java",
 			"settings":
 			{
-				"buffer_size": 381,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/com/cig/jfreetype/FreeType.java",
-			"settings":
-			{
-				"buffer_size": 822,
+				"buffer_size": 1184,
 				"line_ending": "Windows"
 			}
 		},
@@ -75,15 +71,7 @@
 			"file": "src/FreeType.cpp",
 			"settings":
 			{
-				"buffer_size": 1355,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/Vector2.h",
-			"settings":
-			{
-				"buffer_size": 194,
+				"buffer_size": 1370,
 				"line_ending": "Windows"
 			}
 		},
@@ -99,7 +87,15 @@
 			"file": "src/TextRenderer.cpp",
 			"settings":
 			{
-				"buffer_size": 3507,
+				"buffer_size": 4507,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Manifest.h",
+			"settings":
+			{
+				"buffer_size": 189,
 				"line_ending": "Windows"
 			}
 		}
@@ -128,6 +124,9 @@
 	},
 	"file_history":
 	[
+		"/C/Users/Work/Desktop/jfreetype/src/FontManager.cpp",
+		"/C/Users/Work/Desktop/jfreetype/build.xml",
+		"/C/Users/Work/Desktop/jfreetype/src/Vector2.h",
 		"/C/Users/Work/Desktop/jfreetype/src/TextRenderer.cpp",
 		"/C/Users/Work/Desktop/jfreetype/src/Manifest.h",
 		"/C/Users/Work/Desktop/jfreetype/src/com/cig/jfreetype/Bitmap.java",
@@ -193,6 +192,9 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"FreeType",
+			"freeType",
+			"FreeType",
 			"cout <<",
 			"RenderChar",
 			"\n        ",
@@ -243,7 +245,7 @@
 	"groups":
 	[
 		{
-			"selected": 6,
+			"selected": 2,
 			"sheets":
 			[
 				{
@@ -251,15 +253,15 @@
 					"file": "Makefile",
 					"settings":
 					{
-						"buffer_size": 336,
+						"buffer_size": 486,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								201,
-								201
+								443,
+								443
 							]
 						],
 						"settings":
@@ -274,44 +276,18 @@
 				},
 				{
 					"buffer": 1,
-					"file": "build.xml",
+					"file": "src/com/cig/jfreetype/JFreeType.java",
 					"settings":
 					{
-						"buffer_size": 381,
+						"buffer_size": 1184,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								381,
-								381
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/XML/XML.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "src/com/cig/jfreetype/FreeType.java",
-					"settings":
-					{
-						"buffer_size": 822,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								118,
-								118
+								130,
+								130
 							]
 						],
 						"settings":
@@ -326,19 +302,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 3,
+					"buffer": 2,
 					"file": "src/FreeType.cpp",
 					"settings":
 					{
-						"buffer_size": 1355,
+						"buffer_size": 1370,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								944,
-								944
+								258,
+								258
 							]
 						],
 						"settings":
@@ -353,33 +329,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 4,
-					"file": "src/Vector2.h",
-					"settings":
-					{
-						"buffer_size": 194,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								53,
-								53
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 5,
+					"buffer": 3,
 					"file": "src/Bitmap.cpp",
 					"settings":
 					{
@@ -406,19 +356,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 4,
 					"file": "src/TextRenderer.cpp",
 					"settings":
 					{
-						"buffer_size": 3507,
+						"buffer_size": 4507,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2707,
-								2707
+								1546,
+								1546
 							]
 						],
 						"settings":
@@ -427,7 +377,33 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 240.0,
+						"translation.y": 384.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "src/Manifest.h",
+					"settings":
+					{
+						"buffer_size": 189,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								83,
+								83
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -477,12 +453,12 @@
 		"selected_items":
 		[
 			[
-				"textrend",
-				"src/TextRenderer.cpp"
-			],
-			[
 				"manifest.h",
 				"src/Manifest.h"
+			],
+			[
+				"textrend",
+				"src/TextRenderer.cpp"
 			],
 			[
 				"bitmap.cpp",

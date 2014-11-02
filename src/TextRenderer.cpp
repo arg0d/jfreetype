@@ -5,8 +5,6 @@
 #include "Manifest.h"
 #include "Bitmap.cpp"
 
-using namespace std;
-
 class TextRenderer {
 
 public:
@@ -31,7 +29,9 @@ private:
 	TextMetrics Meassure(FT_Face face, const std::string &string);
 
 	FT_Library library;
-	FT_Face m_Face;
+
+	typedef std::map<std::string, FT_Face> TFaces;
+	TFaces m_Faces;
 
 };
 
@@ -58,15 +58,26 @@ Bitmap* TextRenderer::Render(const std::string& font, const std::string& text, f
 		}
 	}
 	
-	if (m_Face == NULL) {
+	// if (m_Face == NULL) {
+	// 	error = FT_New_Face( library, font.c_str(), 0, &face );
+	// 	if (error) {
+	// 		std::cout << "Could not load face!" << std::endl;
+	// 		return NULL;
+	// 	}
+	// 	m_Face = face;
+	// } else {
+	// 	face = m_Face;
+	// }
+	face = m_Faces[font];
+	if (face == NULL) {
 		error = FT_New_Face( library, font.c_str(), 0, &face );
+
 		if (error) {
-			std::cout << "Could not load face!" << std::endl;
+			std::cout << "Could not load face! " << font << std::endl;
 			return NULL;
 		}
-		m_Face = face;
-	} else {
-		face = m_Face;
+
+		m_Faces[font] = face;
 	}
 	
 	error = FT_Set_Char_Size(
@@ -126,7 +137,7 @@ Bitmap* TextRenderer::RenderString(FT_Face face, const std::string& str, FT_Rend
 
 TextRenderer::TextMetrics TextRenderer::Meassure(FT_Face face, const std::string &string)
 {
-	if (m_Face == NULL) {
+	if (face == NULL) {
 		return TextMetrics();
 	}
 

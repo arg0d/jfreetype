@@ -3,11 +3,11 @@ package com.cig.jfreetype;
 import java.lang.reflect.Field;
 import com.cig.jfreetype.Bitmap;
 
-public class FreeType {
+public class JFreeType {
 
 	static {
 
-		System.loadLibrary("lib");
+		System.loadLibrary("jfreetype");
 	}
 	
 	public static final int RENDER_MODE_MONO = 1;
@@ -17,10 +17,18 @@ public class FreeType {
 
 	public static void main(String[] args) {
 
-		FreeType freeType = new FreeType();
+		JFreeType freeType = new JFreeType();
 
-		Bitmap bitmap = freeType.render("C:/Windows/Fonts/Tahoma.ttf", "Chris g", 20f, RENDER_MODE_MONO);
+		String text = "Testing";
 
+		printBitmap(freeType.render("C:/Windows/Fonts/Tahoma.ttf", text, 20f, RENDER_MODE_MONO));
+		printBitmap(freeType.render("C:/Windows/Fonts/Arial.ttf", text, 20f, RENDER_MODE_MONO));
+		printBitmap(freeType.render("C:/Windows/Fonts/Tahoma.ttf", text, 20f, RENDER_MODE_MONO));
+		printBitmap(freeType.render("C:/Windows/Fonts/Arial.ttf", text, 20f, RENDER_MODE_MONO));
+		
+	}
+
+	private static void printBitmap(Bitmap bitmap) {
 		String str = "";
 		for (int y = 0; y < bitmap.height; y++) {
 			for (int x = 0; x < bitmap.width; x++) {

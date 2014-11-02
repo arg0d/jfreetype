@@ -3,8 +3,9 @@
 
 using namespace std;
 
-extern "C" JNIEXPORT jobject JNICALL Java_com_cig_jfreetype_FreeType_render(JNIEnv *env, jobject obj, jstring strFont, jstring strText, jfloat size, jint renderMode)
+extern "C" JNIEXPORT jobject JNICALL Java_com_cig_jfreetype_JFreeType_render(JNIEnv *env, jobject obj, jstring strFont, jstring strText, jfloat size, jint renderMode)
 {
+	return NULL;
 	std::string font = JNIHelper::GetString(env, strFont);
 	std::string text = JNIHelper::GetString(env, strText);
 	Bitmap *bitmap = TextRenderer::instance->Render(font, text, (float) size, renderMode);
