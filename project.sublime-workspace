@@ -60,6 +60,14 @@
 			}
 		},
 		{
+			"file": "/C/Users/Work/Desktop/test/Testing.cpp",
+			"settings":
+			{
+				"buffer_size": 123,
+				"line_ending": "Windows"
+			}
+		},
+		{
 			"file": "src/com/cig/jfreetype/JFreeType.java",
 			"settings":
 			{
@@ -72,6 +80,14 @@
 			"settings":
 			{
 				"buffer_size": 1370,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Test/Testing.h",
+			"settings":
+			{
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		},
@@ -92,10 +108,26 @@
 			}
 		},
 		{
-			"file": "src/Manifest.h",
+			"file": "jni/Android.mk",
 			"settings":
 			{
-				"buffer_size": 189,
+				"buffer_size": 290,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "libs/freetype/Android.mk",
+			"settings":
+			{
+				"buffer_size": 1786,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "jni/Application.mk",
+			"settings":
+			{
+				"buffer_size": 43,
 				"line_ending": "Windows"
 			}
 		}
@@ -124,14 +156,16 @@
 	},
 	"file_history":
 	[
+		"/C/Users/Work/Desktop/jfreetype/Application.mk",
+		"/C/Users/Work/Desktop/jfreetype/src/Manifest.h",
+		"/C/Users/Work/Desktop/jfreetype/src/jnihelper.cpp",
+		"/C/Users/Work/Desktop/jfreetype/Android.mk",
 		"/C/Users/Work/Desktop/jfreetype/src/FontManager.cpp",
 		"/C/Users/Work/Desktop/jfreetype/build.xml",
 		"/C/Users/Work/Desktop/jfreetype/src/Vector2.h",
 		"/C/Users/Work/Desktop/jfreetype/src/TextRenderer.cpp",
-		"/C/Users/Work/Desktop/jfreetype/src/Manifest.h",
 		"/C/Users/Work/Desktop/jfreetype/src/com/cig/jfreetype/Bitmap.java",
 		"/C/Users/Work/Desktop/jfreetype/src/Bitmap.cpp",
-		"/C/Users/Work/Desktop/jfreetype/src/jnihelper.cpp",
 		"/C/Users/Work/Desktop/jfreetype/src/Bitmap.java",
 		"/C/Users/Work/Desktop/JavaFreeType binding/hs_err_pid3488.log",
 		"/C/Users/Work/Desktop/JavaFreeType binding/build.xml",
@@ -245,7 +279,7 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 3,
 			"sheets":
 			[
 				{
@@ -260,13 +294,41 @@
 						"selection":
 						[
 							[
-								443,
-								443
+								452,
+								452
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/Makefile/Makefile.tmLanguage"
+						},
+						"translation.x": 32.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/C/Users/Work/Desktop/test/Testing.cpp",
+					"settings":
+					{
+						"buffer_size": 123,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								121,
+								121
+							]
+						],
+						"settings":
+						{
+							"auto_name": "",
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -275,7 +337,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 1,
+					"buffer": 2,
 					"file": "src/com/cig/jfreetype/JFreeType.java",
 					"settings":
 					{
@@ -302,7 +364,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 2,
+					"buffer": 3,
 					"file": "src/FreeType.cpp",
 					"settings":
 					{
@@ -313,8 +375,8 @@
 						"selection":
 						[
 							[
-								258,
-								258
+								459,
+								459
 							]
 						],
 						"settings":
@@ -329,7 +391,33 @@
 					"type": "text"
 				},
 				{
-					"buffer": 3,
+					"buffer": 4,
+					"file": "src/Test/Testing.h",
+					"settings":
+					{
+						"buffer_size": 0,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
 					"file": "src/Bitmap.cpp",
 					"settings":
 					{
@@ -356,7 +444,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 6,
 					"file": "src/TextRenderer.cpp",
 					"settings":
 					{
@@ -367,8 +455,8 @@
 						"selection":
 						[
 							[
-								1546,
-								1546
+								387,
+								387
 							]
 						],
 						"settings":
@@ -377,30 +465,82 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 384.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 5,
-					"file": "src/Manifest.h",
+					"buffer": 7,
+					"file": "jni/Android.mk",
 					"settings":
 					{
-						"buffer_size": 189,
+						"buffer_size": 290,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								83,
-								83
+								290,
+								290
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C++.tmLanguage"
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "libs/freetype/Android.mk",
+					"settings":
+					{
+						"buffer_size": 1786,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1347,
+								1347
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 64.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "jni/Application.mk",
+					"settings":
+					{
+						"buffer_size": 43,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								43,
+								43
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -452,6 +592,10 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"jnihelper",
+				"src/jnihelper.cpp"
+			],
 			[
 				"manifest.h",
 				"src/Manifest.h"
