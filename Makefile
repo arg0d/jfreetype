@@ -16,5 +16,11 @@ android:
 	ndk-build
 
 clean:
+	ant clean
+
+clean_android:
+	ndk-build clean
+
+clean_all:
 	ndk-build clean
 	ant clean
