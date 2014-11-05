@@ -5,5 +5,15 @@
 #include <vector>
 #include <map>
 #include "Vector2.h"
+#include <stdarg.h>
 
-#define Log(strFormat, ...) printf(strFormat, __VA_ARGS__); std::cout << std::endl;
+void Log(const char *format, ...) 
+{
+	char buffer[1024];
+	va_list args;
+	va_start(args, format);
+	vsprintf(buffer, format, args);
+	va_end(args);
+	
+	printf(buffer, "");
+}

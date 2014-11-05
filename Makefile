@@ -12,5 +12,9 @@ run:
 jar:
 	ant build-jar
 
+android:
+	ndk-build
+
 clean:
+	ndk-build clean
 	ant clean

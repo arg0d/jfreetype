@@ -33,7 +33,7 @@ Bitmap::Bitmap(int width, int height, int type)
 :yMax(0)
 {
 	if (type == 0) {
-		Log("Cannot create bitmap with type of 0!", "");
+		Log("Cannot create bitmap with type of 0!");
 	}
 
 	this->width = width;

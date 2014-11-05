@@ -79,7 +79,7 @@
 			"file": "src/FreeType.cpp",
 			"settings":
 			{
-				"buffer_size": 1370,
+				"buffer_size": 1398,
 				"line_ending": "Windows"
 			}
 		},
@@ -368,15 +368,15 @@
 					"file": "src/FreeType.cpp",
 					"settings":
 					{
-						"buffer_size": 1370,
+						"buffer_size": 1398,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								459,
-								459
+								483,
+								483
 							]
 						],
 						"settings":
