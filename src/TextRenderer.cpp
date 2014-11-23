@@ -60,6 +60,37 @@ Bitmap* TextRenderer::Render(const std::string& font, const std::string& text, f
 	return bitmap;
 }
 
+void TextRenderer::Render(Bitmap &bitmap, const std::string &font, const std::string &text, float size)
+{
+	int error = 0;
+
+	if (library == NULL) {
+		error = FT_Init_FreeType( &library );
+		if ( error )
+		{
+			std::cout << "Could no intialize library" << std::endl;
+			return;
+		}
+	}
+
+	FT_Face face = GetFace(font);
+
+	error = FT_Set_Char_Size(
+            face,    /* handle to face object           */
+            0,       /* char_width in 1/64th of points  */
+            size * 64,   /* char_height in 1/64th of points */
+            72,     /* horizontal device resolution    */
+            72 );   /* vertical device resolution      */
+	if (error) {
+		std::cout << "Could not set char size!" << std::endl;
+		return;
+	}
+
+	TextMetrics metrics = Measure(face, text);
+	bitmap.Initialize(metrics.width, metrics.height);
+	RenderString(bitmap, face, text, Vector2(), metrics, FT_RENDER_MODE_NORMAL);
+}
+
 Vector2 TextRenderer::Measure(const std::string &font, const std::string &text)
 {
 	Vector2 size;

@@ -34,7 +34,7 @@ public:
 	/* Singleton */
 	static TextRenderer *instance;
 	
-	// void										Render(const Bitmap &bitmap, )
+	void										Render(Bitmap &bitmap, const std::string &font, const std::string &text, float size);
 	Bitmap* 									Render(const std::string &font, const std::string &text, float size, int renderMode);
 	Vector2 									Measure(const std::string &font, const std::string &text);
 

@@ -8,7 +8,7 @@ public:
 	Bitmap(int width, int height);
 	~Bitmap();
 
-	void Intialize(int width, int height);
+	void Initialize(int width, int height);
 
 	void Draw(FT_Bitmap &bitmap, int xp, int yp);
 
@@ -32,7 +32,7 @@ Bitmap::Bitmap():
 Bitmap::Bitmap(int width, int height):
  pixels(NULL)
 {
-	Intialize(width, height);
+	Initialize(width, height);
 }
 
 Bitmap::~Bitmap()
@@ -40,7 +40,7 @@ Bitmap::~Bitmap()
 	delete pixels;
 }
 
-void Bitmap::Intialize(int width, int height)
+void Bitmap::Initialize(int width, int height)
 {
 	if (pixels != NULL)
 	{
