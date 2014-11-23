@@ -7,8 +7,8 @@ public:
 
 	float x, y;
 
-	int GetX() { return (int) x; }
-	int GetY() { return (int) y; }
+	int GetX() const { return (int) x; }
+	int GetY() const { return (int) y; }
 
 	bool IsNull() { return x == 0 && y == 0; }
 
