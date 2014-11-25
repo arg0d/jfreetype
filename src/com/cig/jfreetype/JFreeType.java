@@ -23,7 +23,7 @@ public class JFreeType {
 		JFreeType freeType = new JFreeType();
 
 		String font = "C:/Windows/Fonts/Arial.ttf";
-		String text = "launch";
+		String text = "launch g";
 
 		Bitmap bitmap = freeType.render(font, text, 30f);
 		printBitmap(bitmap);

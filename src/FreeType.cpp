@@ -73,7 +73,7 @@ extern "C" JNIEXPORT jobject JNICALL Java_com_cig_jfreetype_JFreeType_renderWrap
 {
 	std::string font = JNIHelper::GetString(env, strFont);
 	std::string text = JNIHelper::GetString(env, strText);
-	Bitmap *bitmap = TextRenderer::instance->RenderWrapped(font, text, (float) size, Vector2((int) boundsWidth, (int) boundsHeight), TR_ALIGNMENT_CENTER, renderMode);
+	Bitmap *bitmap = TextRenderer::instance->RenderWrapped(font, text, (float) size, Vector2((int) boundsWidth, (int) boundsHeight), TR_ALIGNMENT_CENTER);
 
 	if (bitmap == NULL) {
 		return NULL;

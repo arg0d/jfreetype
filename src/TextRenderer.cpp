@@ -49,9 +49,8 @@ std::string TextRenderer::Render(Bitmap &bitmap, const std::string &font, const 
 
 	TextMetrics metrics;
 	Measure(face, text, &metrics);
-	Log("height=%d", metrics.height);
 	bitmap.Initialize(metrics.width, metrics.height);
-	RenderString(bitmap, face, text, Vector2(), metrics, FT_RENDER_MODE_NORMAL);
+	RenderString(bitmap, face, text, Vector2(), metrics.ascender);
 
 	return "";
 }
@@ -71,7 +70,7 @@ Vector2 TextRenderer::Measure(const std::string &font, const std::string &text)
 	return size;
 }
 
-Bitmap* TextRenderer::RenderWrapped(const std::string &font, const std::string &text, float size, Vector2 bounds, int alignment, int renderMode)
+Bitmap* TextRenderer::RenderWrapped(const std::string &font, const std::string &text, float size, Vector2 bounds, int alignment)
 {
 	int error = 0;
 
@@ -127,7 +126,7 @@ Bitmap* TextRenderer::RenderWrapped(const std::string &font, const std::string &
 			Log("Invalid wrapping alignment!");
 		}
 
-		RenderString(*bitmap, face, str, Vector2(horizontalOffset, y), metrics, GetFTRenderMode(renderMode));
+		RenderString(*bitmap, face, str, Vector2(horizontalOffset, y), metrics, FT_RENDER_MODE_NORMAL);
 		y += wrappedTextMetrics.line_height;
 	}
 
@@ -136,28 +135,34 @@ Bitmap* TextRenderer::RenderWrapped(const std::string &font, const std::string &
 
 void TextRenderer::RenderString(Bitmap &bitmap, FT_Face face, const std::string &text, const Vector2 &position, int ascender, GlyphCache* cache)
 {
+	bool bDeleteCache = false;
+	if (cache == NULL)
+	{
+		cache = new GlyphCache(face);
+		bDeleteCache = true;
+	}
+
 	int error = 0;
 
+	int pen_x = 0;
 	for (unsigned int i = 0; i < text.length(); i++)
 	{
 		Glyph glyph;
 		std::string strError = cache->GetGlyph((int) text.at(i), &glyph);
 		if (strError.empty())
 		{
-			// bitmap.Draw(glyph.ft_glyph->bitmap, 0 + position.GetX(), 0 + position.GetY());
-			FT_Glyph ft_glyph = glyph.ft_glyph;
-			FT_Vector offset;
-			offset.x = 0;
-			offset.y = 0;
-
-			error = FT_Glyph_To_Bitmap(&ft_glyph, FT_RENDER_MODE_NORMAL, &offset, false);
-			if (error != 0)
+			error = cache->GlyphToBitmap(glyph);
+			if (error == 0)
 			{
-				
+				bitmap.Draw(glyph.ft_bitmapGlyph->bitmap, pen_x, ascender - glyph.height + glyph.descender);
+				pen_x += glyph.width;
 			}
-
-
 		}
+	}
+
+	if (bDeleteCache)
+	{
+		delete cache;
 	}
 }
 
@@ -220,7 +225,7 @@ std::string TextRenderer::Measure(FT_Face face, const std::string &string, TextM
 		if (strError.empty())
 		{
 			width += glyph.width;
-			height = std::max(glyph.height, height);
+			height = std::max(glyph.height + glyph.descender, height);
 			ascender = std::max(glyph.ascender, ascender);
 		}
 	}
@@ -326,6 +331,10 @@ GlyphCache::~GlyphCache()
 	for (; it != m_Cache.end(); it++)
 	{
 		FT_Done_Glyph(it->second.ft_glyph);
+		if (it->second.ft_bitmapGlyph != NULL)
+		{
+			FT_Done_Glyph(reinterpret_cast<FT_Glyph>(it->second.ft_bitmapGlyph));
+		}
 	}
 }
 
@@ -360,15 +369,39 @@ std::string GlyphCache::GetGlyph(int iCharCode, Glyph* pGlyph)
 		// Glyph has been cached succesfully
 		Glyph glyph;
 		glyph.ft_glyph = ft_glyph;
+		glyph.ft_bitmapGlyph = NULL;
 		glyph.width = m_Face->glyph->advance.x >> 6;
 		glyph.height = m_Face->glyph->metrics.height >> 6;
 		glyph.ascender = m_Face->glyph->metrics.horiBearingY >> 6;
+		glyph.descender = glyph.height - glyph.ascender;
 		m_Cache[iCharCode] = glyph;
 		(*pGlyph) = glyph; // set the output glyph
 		return "";
 	}
 	else
 	{
-		return Format("GlyphCache Could not get char charcode=%d", iCharCode);
+		return Format("GlyphCache Could not get char index charcode=%d", iCharCode);
 	}
+}
+
+int GlyphCache::GlyphToBitmap(Glyph &glyph)
+{
+	if (glyph.ft_bitmapGlyph != NULL)
+	{
+		return 0;	// already rendered, 0 indicates success just like freetype
+	}
+
+	FT_Glyph ft_glyph = glyph.ft_glyph;
+	FT_Vector offset;
+	offset.x = 0;
+	offset.y = 0;
+
+	int error = FT_Glyph_To_Bitmap(&ft_glyph, FT_RENDER_MODE_NORMAL, &offset, false);
+	if (error == 0)
+	{
+		glyph.ft_bitmapGlyph = reinterpret_cast<FT_BitmapGlyph>(ft_glyph);
+		return 0; // success
+	}
+
+	return error; // failed
 }

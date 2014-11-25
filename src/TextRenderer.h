@@ -17,9 +17,11 @@ struct Glyph
 
 public:
 	FT_Glyph									ft_glyph;
+	FT_BitmapGlyph								ft_bitmapGlyph;
 	int 										width;
 	int 										height;
 	int 										ascender;
+	int 										descender;
 };
 
 class GlyphCache {
@@ -29,6 +31,7 @@ public:
 												~GlyphCache();
 
 	std::string									GetGlyph(int iCharCode, Glyph *glyph);
+	int 										GlyphToBitmap(Glyph &glyph);
 
 private:
 
@@ -53,7 +56,7 @@ public:
 	std::string 								Render(Bitmap &bitmap, const std::string &font, const std::string &text, float size);
 	Vector2 									Measure(const std::string &font, const std::string &text);
 
-	Bitmap* 									RenderWrapped(const std::string &font, const std::string &text, float size, Vector2 bounds, int alignment, int renderMode);
+	Bitmap* 									RenderWrapped(const std::string &font, const std::string &text, float size, Vector2 bounds, int alignment);
 
 private:
 	
@@ -66,7 +69,7 @@ private:
 
 	static FT_Render_Mode 						GetFTRenderMode(int renderMode);
 	FT_Face 									GetFace(const std::string &font);
-	void										RenderString(Bitmap &bitmap, FT_Face face, const std::string &text, const Vector2 &position, int ascender, GlyphCache* cache);
+	void										RenderString(Bitmap &bitmap, FT_Face face, const std::string &text, const Vector2 &position, int ascender, GlyphCache* cache = NULL);
 	void										RenderString(Bitmap &bitmap, FT_Face face, const std::string& str, const Vector2 &position, const TextMetrics &metrics, FT_Render_Mode renderModeFT);
 	std::string 								Measure(FT_Face face, const std::string &string, TextMetrics *metrics, GlyphCache* cache = NULL);
 	WrappedTextMetrics							WrapLines(std::vector<std::string> &output, Vector2 size, FT_Face face, const std::string &text);
