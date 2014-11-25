@@ -13,7 +13,7 @@ public class JFreeType {
 	public static final int RENDER_MODE_MONO = 1;
 	public static final int RENDER_MODE_NORMAL = 2;
 
-	public static native final Bitmap render(String font, String str, float scale, int renderMode);
+	public static native final Bitmap render(String font, String text, float size);
 	public static native final Vector2 meassure(String font, String str);
 
 	public static native final Bitmap renderWrapped(String font, String text, float scale, int width, int height, int renderMode);
@@ -23,9 +23,9 @@ public class JFreeType {
 		JFreeType freeType = new JFreeType();
 
 		String font = "C:/Windows/Fonts/Arial.ttf";
-		String text = "our em launch";
+		String text = "launch";
 
-		Bitmap bitmap = freeType.renderWrapped(font, text, 30f, 120, 1000, RENDER_MODE_NORMAL);
+		Bitmap bitmap = freeType.render(font, text, 30f);
 		printBitmap(bitmap);
 
 		System.out.println(bitmap.width+"  "+bitmap.height);		

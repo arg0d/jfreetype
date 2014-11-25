@@ -2,14 +2,9 @@
 
 #include "TextRenderer.h"
 
-TextRenderer* TextRenderer::instance = new TextRenderer();
+#include "memory"
 
-TextRenderer::TextMetrics::TextMetrics(int width, int height, int base_line)
-{
-	this->width = width;
-	this->height = height;
-	this->base_line = base_line;
-}
+TextRenderer* TextRenderer::instance = new TextRenderer();
 
 FT_Face TextRenderer::GetFace(const std::string &font)
 {
@@ -27,49 +22,16 @@ FT_Face TextRenderer::GetFace(const std::string &font)
 	return face;
 }
 
-Bitmap* TextRenderer::Render(const std::string& font, const std::string& text, float size, int renderMode)
+std::string TextRenderer::Render(Bitmap &bitmap, const std::string &font, const std::string &text, float size)
 {
-	FT_Face face;
+
 	int error = 0;
 
 	if (library == NULL) {
 		error = FT_Init_FreeType( &library );
 		if ( error )
 		{
-			std::cout << "Could no intialize library" << std::endl;
-			return NULL;
-		}
-	}
-	
-	face = GetFace(font);
-	
-	error = FT_Set_Char_Size(
-            face,    /* handle to face object           */
-            0,       /* char_width in 1/64th of points  */
-            size * 64,   /* char_height in 1/64th of points */
-            72,     /* horizontal device resolution    */
-            72 );   /* vertical device resolution      */
-	if (error) {
-		std::cout << "Could not set char size!" << std::endl;
-		return NULL;
-	}
-	
-	TextMetrics metrics = Measure(face, text);
-	Bitmap *bitmap = new Bitmap(metrics.width, metrics.height);
-	RenderString(*bitmap, face, text, Vector2(), metrics, GetFTRenderMode(renderMode));
-	return bitmap;
-}
-
-void TextRenderer::Render(Bitmap &bitmap, const std::string &font, const std::string &text, float size)
-{
-	int error = 0;
-
-	if (library == NULL) {
-		error = FT_Init_FreeType( &library );
-		if ( error )
-		{
-			std::cout << "Could no intialize library" << std::endl;
-			return;
+			return Format("Could not initalize library errorCode=%d", error);
 		}
 	}
 
@@ -82,13 +44,16 @@ void TextRenderer::Render(Bitmap &bitmap, const std::string &font, const std::st
             72,     /* horizontal device resolution    */
             72 );   /* vertical device resolution      */
 	if (error) {
-		std::cout << "Could not set char size!" << std::endl;
-		return;
+		return Format("Could not set char size errorCode=%d", error);
 	}
 
-	TextMetrics metrics = Measure(face, text);
+	TextMetrics metrics;
+	Measure(face, text, &metrics);
+	Log("height=%d", metrics.height);
 	bitmap.Initialize(metrics.width, metrics.height);
 	RenderString(bitmap, face, text, Vector2(), metrics, FT_RENDER_MODE_NORMAL);
+
+	return "";
 }
 
 Vector2 TextRenderer::Measure(const std::string &font, const std::string &text)
@@ -98,7 +63,8 @@ Vector2 TextRenderer::Measure(const std::string &font, const std::string &text)
 
 	face = GetFace(font);
 
-	TextMetrics metrics = Measure(face, text);
+	TextMetrics metrics;
+	Measure(face, text, &metrics);
 	size.x = metrics.width;
 	size.y = metrics.height;	
 
@@ -140,7 +106,8 @@ Bitmap* TextRenderer::RenderWrapped(const std::string &font, const std::string &
 	for (unsigned int i = 0; i < lines.size(); i++)
 	{	
 		std::string str = lines.at(i);
-		TextMetrics metrics = Measure(face, str);
+		TextMetrics metrics;
+		Measure(face, str, &metrics);
 
 		int horizontalOffset = 0;
 
@@ -165,6 +132,33 @@ Bitmap* TextRenderer::RenderWrapped(const std::string &font, const std::string &
 	}
 
 	return bitmap;
+}
+
+void TextRenderer::RenderString(Bitmap &bitmap, FT_Face face, const std::string &text, const Vector2 &position, int ascender, GlyphCache* cache)
+{
+	int error = 0;
+
+	for (unsigned int i = 0; i < text.length(); i++)
+	{
+		Glyph glyph;
+		std::string strError = cache->GetGlyph((int) text.at(i), &glyph);
+		if (strError.empty())
+		{
+			// bitmap.Draw(glyph.ft_glyph->bitmap, 0 + position.GetX(), 0 + position.GetY());
+			FT_Glyph ft_glyph = glyph.ft_glyph;
+			FT_Vector offset;
+			offset.x = 0;
+			offset.y = 0;
+
+			error = FT_Glyph_To_Bitmap(&ft_glyph, FT_RENDER_MODE_NORMAL, &offset, false);
+			if (error != 0)
+			{
+				
+			}
+
+
+		}
+	}
 }
 
 void TextRenderer::RenderString(Bitmap &bitmap, FT_Face face, const std::string &str, const Vector2 &position, const TextMetrics &metrics, FT_Render_Mode renderModeFT)
@@ -197,55 +191,58 @@ void TextRenderer::RenderString(Bitmap &bitmap, FT_Face face, const std::string 
 		int h = face->glyph->metrics.height >> 6;
 		int descender = h - (face->glyph->metrics.horiBearingY >> 6);
 		
-		bitmap.Draw(face->glyph->bitmap, x_pen + position.GetX(), metrics.base_line - h + descender + position.GetY());
+		bitmap.Draw(face->glyph->bitmap, x_pen + position.GetX(), metrics.ascender - h + descender + position.GetY());
 
 		x_pen += face->glyph->advance.x >> 6;
 
 	}
 }
 
-TextRenderer::TextMetrics TextRenderer::Measure(FT_Face face, const std::string &string)
+std::string TextRenderer::Measure(FT_Face face, const std::string &string, TextMetrics *metrics, GlyphCache* cache)
 {
-	if (face == NULL) {
-		return TextMetrics();
+	// Hack, want to delete cache if it was created.
+	// If it was passed to this function, don't delete it
+	bool bDeleteCachce = false;
+
+	if (cache == NULL)
+	{
+		cache = new GlyphCache(face);
+		bDeleteCachce = true; // Delete cache once we are done
 	}
 
 	int width = 0;
 	int height = 0;
-	int base_line = 0;
+	int ascender = 0;
 
 	for (unsigned int i = 0; i < string.length(); i++) {
-		long glyph_index = FT_Get_Char_Index(face, (int) string.at(i));
-
-		if (glyph_index == 0) {
-			return TextMetrics();
+		Glyph glyph;
+		std::string strError = cache->GetGlyph((int) string.at(i), &glyph);
+		if (strError.empty())
+		{
+			width += glyph.width;
+			height = std::max(glyph.height, height);
+			ascender = std::max(glyph.ascender, ascender);
 		}
-
-		int error = FT_Load_Glyph(
-		            face,          /* handle to face object */
-		            glyph_index,   /* glyph index           */
-		            0 );  /* load flags, see below */
-		if (error) {
-			std::cout << "Could not load glyph!" << std::endl;
-			return TextMetrics();
-		}
-
-		width += face->glyph->advance.x >> 6;
-
-		int h = face->glyph->metrics.height >> 6;
-		int descender = h - (face->glyph->metrics.horiBearingY >> 6);
-
-		base_line = std::max(base_line, h - descender);
-		height = std::max(height, h + descender);
 	}
 
-	return TextMetrics(width, height, base_line);
+	if (bDeleteCachce)
+	{
+		// Delete cache since this function created it
+		delete cache;
+	}
+
+	metrics->width = width;
+	metrics->height = height;
+	metrics->ascender = ascender;
+	return "";
 }
 
 TextRenderer::WrappedTextMetrics TextRenderer::WrapLines(std::vector<std::string> &output, Vector2 bounds, FT_Face face, const std::string &text)
 {
 	int totalHeight = 0; // output variable
-	const int spaceWidth = Measure(face, " ").width;
+	TextMetrics spaceMetrics;
+	Measure(face, " ", &spaceMetrics);
+	const int spaceWidth = spaceMetrics.width;
 	int maxHeight = 0;
 
 	std::vector<std::string> words;
@@ -257,7 +254,8 @@ TextRenderer::WrappedTextMetrics TextRenderer::WrapLines(std::vector<std::string
 	for (unsigned int i = 0; i < words.size(); i++)
 	{
 		std::string word = words.at(i);
-		TextMetrics metrics = Measure(face, word);
+		TextMetrics metrics;
+		Measure(face, word, &metrics);
 
 		bool addSpace;
 		addSpace = i == 0 ? false : true; // Don't add space on the first word
@@ -327,16 +325,17 @@ GlyphCache::~GlyphCache()
 	TGlyphCache::iterator it = m_Cache.begin();
 	for (; it != m_Cache.end(); it++)
 	{
-		FT_Done_Glyph(it->second);
+		FT_Done_Glyph(it->second.ft_glyph);
 	}
 }
 
-FT_Glyph GlyphCache::GetGlyph(int iCharCode)
+std::string GlyphCache::GetGlyph(int iCharCode, Glyph* pGlyph)
 {
 	TGlyphCache::iterator it = m_Cache.find(iCharCode);
 	if (it != m_Cache.end())
 	{
-		return it->second;
+		(*pGlyph) = it->second; // set the output glyph
+		return "";
 	}
 
 	// Add glyph to cache
@@ -348,25 +347,28 @@ FT_Glyph GlyphCache::GetGlyph(int iCharCode)
 		error = FT_Load_Glyph(m_Face, uiGlyphIndex, FT_LOAD_DEFAULT);
 		if (error != 0)
 		{
-			Log("GlyphCache couldn't load glyph with charcode<%d>", iCharCode);
-			return NULL;
+			return Format("GlyphCache could not load glyph charcode=%d", iCharCode);
 		}
 
-		FT_Glyph glyph;
-		error = FT_Get_Glyph(m_Face->glyph, &glyph);
+		FT_Glyph ft_glyph;
+		error = FT_Get_Glyph(m_Face->glyph, &ft_glyph);
 		if (error != 0)
 		{
-			Log("GlyphCache couldn't copy glyph from glyph slot for charcode<%d>", iCharCode);
-			return NULL;
+			return Format("GlyphCache could not get glyph charcode=%d", iCharCode);
 		}
 
 		// Glyph has been cached succesfully
+		Glyph glyph;
+		glyph.ft_glyph = ft_glyph;
+		glyph.width = m_Face->glyph->advance.x >> 6;
+		glyph.height = m_Face->glyph->metrics.height >> 6;
+		glyph.ascender = m_Face->glyph->metrics.horiBearingY >> 6;
 		m_Cache[iCharCode] = glyph;
-		return glyph;
+		(*pGlyph) = glyph; // set the output glyph
+		return "";
 	}
 	else
 	{
-		Log("GlyphCache couldn't find glyph index for charcode<%d>", iCharCode);
-		return NULL;
+		return Format("GlyphCache Could not get char charcode=%d", iCharCode);
 	}
 }

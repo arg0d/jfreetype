@@ -18,6 +18,17 @@ void Log(const char *format, ...)
 	printf("%s\n", buffer);
 }
 
+std::string Format(const char* format, ...)
+{
+	char buffer[1024];
+	va_list args;
+	va_start(args, format);
+	vsprintf(buffer, format, args);
+	va_end(args);
+	
+	return std::string(buffer);
+}
+
 void String_Split(std::vector<std::string> &output, const std::string &text, char regex)
 {
 	std::string current = "";
