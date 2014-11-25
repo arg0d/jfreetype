@@ -67,7 +67,6 @@ private:
 		int 										line_height;
 	};
 
-	static FT_Render_Mode 						GetFTRenderMode(int renderMode);
 	FT_Face 									GetFace(const std::string &font);
 	void										RenderString(Bitmap &bitmap, FT_Face face, const std::string &text, const Vector2 &position, int ascender, GlyphCache* cache = NULL);
 	void										RenderString(Bitmap &bitmap, FT_Face face, const std::string& str, const Vector2 &position, const TextMetrics &metrics, FT_Render_Mode renderModeFT);

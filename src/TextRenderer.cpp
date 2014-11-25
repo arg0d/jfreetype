@@ -298,24 +298,6 @@ TextRenderer::WrappedTextMetrics TextRenderer::WrapLines(std::vector<std::string
 	return wrappedTextMetrics;
 }
 
-FT_Render_Mode TextRenderer::GetFTRenderMode(int renderMode)
-{
-	switch (renderMode) {
-
-		case 1:
-			return FT_RENDER_MODE_MONO;	
-
-		case 2:
-			return FT_RENDER_MODE_NORMAL;
-
-		default:
-			return FT_RENDER_MODE_MONO;
-	}	
-}
-
-
-
-
 //=========================================================================================
 // TextMetricsCache
 //=========================================================================================
