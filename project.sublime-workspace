@@ -4,6 +4,26 @@
 		"selected_items":
 		[
 			[
+				"creat",
+				"createImpl"
+			],
+			[
+				"JFreeTyp",
+				"JFreeTypeOptions"
+			],
+			[
+				"spc",
+				"spaceMetrics"
+			],
+			[
+				"horiBea",
+				"horiBearingY"
+			],
+			[
+				"hori",
+				"horiBearingY"
+			],
+			[
 				"Glyp",
 				"Glyph"
 			],
@@ -38,10 +58,6 @@
 			[
 				"wrap",
 				"wrappedTextMetrics"
-			],
-			[
-				"hori",
-				"horizontalOffset"
 			],
 			[
 				"TR_AL",
@@ -112,18 +128,10 @@
 			}
 		},
 		{
-			"file": "/C/Users/Work/Desktop/test/Testing.cpp",
-			"settings":
-			{
-				"buffer_size": 123,
-				"line_ending": "Windows"
-			}
-		},
-		{
 			"file": "src/com/cig/jfreetype/JFreeType.java",
 			"settings":
 			{
-				"buffer_size": 1190,
+				"buffer_size": 2915,
 				"line_ending": "Windows"
 			}
 		},
@@ -131,26 +139,7 @@
 			"file": "src/FreeType.cpp",
 			"settings":
 			{
-				"buffer_size": 3832,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"contents": "",
-			"file": "src/Test/Testing.h",
-			"file_size": -1,
-			"file_write_time": -1,
-			"settings":
-			{
-				"buffer_size": 0,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/Bitmap.cpp",
-			"settings":
-			{
-				"buffer_size": 1418,
+				"buffer_size": 4798,
 				"line_ending": "Windows"
 			}
 		},
@@ -158,7 +147,7 @@
 			"file": "src/TextRenderer.cpp",
 			"settings":
 			{
-				"buffer_size": 8535,
+				"buffer_size": 7915,
 				"line_ending": "Windows"
 			}
 		},
@@ -166,7 +155,7 @@
 			"file": "src/TextRenderer.h",
 			"settings":
 			{
-				"buffer_size": 1988,
+				"buffer_size": 2021,
 				"line_ending": "Windows"
 			}
 		},
@@ -174,7 +163,15 @@
 			"file": "src/Manifest.h",
 			"settings":
 			{
-				"buffer_size": 858,
+				"buffer_size": 719,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/jnihelper.cpp",
+			"settings":
+			{
+				"buffer_size": 267,
 				"line_ending": "Windows"
 			}
 		}
@@ -203,6 +200,11 @@
 	},
 	"file_history":
 	[
+		"/C/Users/Work/Desktop/jfreetype/hs_err_pid204.log",
+		"/C/Users/Work/Desktop/jfreetype/src/Test/Testing.h",
+		"/C/Users/Work/Desktop/jfreetype/src/Bitmap.cpp",
+		"/C/Users/Work/Desktop/jfreetype/src/com/cig/jfreetype/JFreeType.java",
+		"/C/Users/Work/Desktop/test/Testing.cpp",
 		"/C/Users/Work/Desktop/jfreetype/libs/freetype/include/ftbitmap.h",
 		"/C/Users/Work/Desktop/jfreetype/src/TextRenderer.h",
 		"/C/Users/Work/Desktop/jfreetype/src/com/cig/jfreetype/Bitmap.java",
@@ -218,7 +220,6 @@
 		"/C/Users/Work/Desktop/jfreetype/Android.mk",
 		"/C/Users/Work/Desktop/jfreetype/src/FontManager.cpp",
 		"/C/Users/Work/Desktop/jfreetype/src/TextRenderer.cpp",
-		"/C/Users/Work/Desktop/jfreetype/src/Bitmap.cpp",
 		"/C/Users/Work/Desktop/jfreetype/src/Bitmap.java",
 		"/C/Users/Work/Desktop/JavaFreeType binding/hs_err_pid3488.log",
 		"/C/Users/Work/Desktop/JavaFreeType binding/build.xml",
@@ -279,6 +280,12 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"Measure",
+			"float size",
+			"\n	",
+			"public static native void ",
+			"getrendermode",
+			"::Measure",
 			"Meassure",
 			"TYPE_GRA",
 			"@Wraplines",
@@ -346,7 +353,7 @@
 	"groups":
 	[
 		{
-			"selected": 6,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -361,41 +368,13 @@
 						"selection":
 						[
 							[
-								436,
-								436
+								12,
+								12
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/Makefile/Makefile.tmLanguage"
-						},
-						"translation.x": 104.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "/C/Users/Work/Desktop/test/Testing.cpp",
-					"settings":
-					{
-						"buffer_size": 123,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								121,
-								121
-							]
-						],
-						"settings":
-						{
-							"auto_name": "",
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -404,24 +383,51 @@
 					"type": "text"
 				},
 				{
-					"buffer": 2,
+					"buffer": 1,
 					"file": "src/com/cig/jfreetype/JFreeType.java",
 					"settings":
 					{
-						"buffer_size": 1190,
+						"buffer_size": 2915,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								706,
-								706
+								2071,
+								2071
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/Java/Java.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 810.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/FreeType.cpp",
+					"settings":
+					{
+						"buffer_size": 4798,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								315,
+								315
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
@@ -432,18 +438,18 @@
 				},
 				{
 					"buffer": 3,
-					"file": "src/FreeType.cpp",
+					"file": "src/TextRenderer.cpp",
 					"settings":
 					{
-						"buffer_size": 3832,
+						"buffer_size": 7915,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1255,
-								1255
+								1678,
+								1678
 							]
 						],
 						"settings":
@@ -452,51 +458,52 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 585.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 4,
-					"file": "src/Test/Testing.h",
+					"file": "src/TextRenderer.h",
 					"settings":
 					{
-						"buffer_size": 0,
+						"buffer_size": 2021,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								1693,
+								1693
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C++.tmLanguage"
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 540.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 5,
-					"file": "src/Bitmap.cpp",
+					"file": "src/Manifest.h",
 					"settings":
 					{
-						"buffer_size": 1418,
+						"buffer_size": 719,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								186,
-								186
+								12,
+								12
 							]
 						],
 						"settings":
@@ -512,78 +519,23 @@
 				},
 				{
 					"buffer": 6,
-					"file": "src/TextRenderer.cpp",
+					"file": "src/jnihelper.cpp",
 					"settings":
 					{
-						"buffer_size": 8535,
+						"buffer_size": 267,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7996,
-								7996
+								265,
+								265
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 4500.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "src/TextRenderer.h",
-					"settings":
-					{
-						"buffer_size": 1988,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								398,
-								398
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 45.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "src/Manifest.h",
-					"settings":
-					{
-						"buffer_size": 858,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								487,
-								487
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"syntax": "Packages/C++/C++.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -636,6 +588,18 @@
 		"selected_items":
 		[
 			[
+				"jnihelper",
+				"src/jnihelper.cpp"
+			],
+			[
+				"jfreetype",
+				"src/com/cig/jfreetype/JFreeType.java"
+			],
+			[
+				"freetypej.ava",
+				"src/com/cig/jfreetype/JFreeType.java"
+			],
+			[
 				"manifest.h",
 				"src/Manifest.h"
 			],
@@ -670,10 +634,6 @@
 			[
 				"build.xml",
 				"build.xml"
-			],
-			[
-				"jnihelper",
-				"src/jnihelper.cpp"
 			],
 			[
 				"textrend",

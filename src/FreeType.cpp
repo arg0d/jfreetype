@@ -3,13 +3,59 @@
 
 using namespace std;
 
-extern "C" JNIEXPORT jobject JNICALL Java_com_cig_jfreetype_JFreeType_render(JNIEnv *env, jobject obj, jstring strFont, jstring strText, jfloat size)
+std::vector<std::string> logs;
+void Log(const char* format, ...)
+{
+	char buffer[1024];
+	va_list args;
+	va_start(args, format);
+	vsprintf(buffer, format, args);
+	va_end(args);
+	
+	logs.push_back(std::string(buffer));
+
+	if (logs.size() > 128)
+	{
+		logs.erase(logs.begin());
+	}
+}
+
+extern "C"
+{
+
+JNIEXPORT jboolean JNICALL Java_com_cig_jfreetype_JFreeType_createImpl(JNIEnv *env, jobject obj)
+{
+	TextRenderer::instance = new TextRenderer();
+
+	if (!TextRenderer::instance->Initialize())
+	{
+		delete TextRenderer::instance;
+		TextRenderer::instance = NULL;
+		return false;
+	}
+
+	return true;
+}
+
+JNIEXPORT jboolean JNICALL Java_com_cig_jfreetype_JFreeType_destroyImpl(JNIEnv *env, jobject obj)
+{
+	if (!TextRenderer::instance->Cleanup())
+	{	
+		return false;
+	}
+
+	delete TextRenderer::instance;
+	TextRenderer::instance = NULL;
+	return true;
+}
+
+JNIEXPORT jobject JNICALL Java_com_cig_jfreetype_JFreeType_render(JNIEnv *env, jobject obj, jstring strFont, jstring strText, jint size)
 {
 	std::string font = JNIHelper::GetString(env, strFont);
 	std::string text = JNIHelper::GetString(env, strText);
 	
 	Bitmap bitmap;
-	std::string error = TextRenderer::instance->Render(bitmap, font, text, (float) size);
+	std::string error = TextRenderer::instance->Render(bitmap, font, text, (int) size);
 
 	if (!error.empty())
 	{
@@ -43,7 +89,7 @@ extern "C" JNIEXPORT jobject JNICALL Java_com_cig_jfreetype_JFreeType_render(JNI
 	return javaBitmap;
 }
 
-extern "C" JNIEXPORT jobject JNICALL Java_com_cig_jfreetype_JFreeType_meassure(JNIEnv *env, jobject obj, jstring strFont, jstring strText)
+JNIEXPORT jobject JNICALL Java_com_cig_jfreetype_JFreeType_meassure(JNIEnv *env, jobject obj, jstring strFont, jstring strText)
 {
 	std::string font = JNIHelper::GetString(env, strFont);
 	std::string text = JNIHelper::GetString(env, strText);
@@ -69,7 +115,7 @@ extern "C" JNIEXPORT jobject JNICALL Java_com_cig_jfreetype_JFreeType_meassure(J
 	return javaVector2;	
 }
 
-extern "C" JNIEXPORT jobject JNICALL Java_com_cig_jfreetype_JFreeType_renderWrapped(JNIEnv *env, jobject obj, jstring strFont, jstring strText, jfloat size, jint boundsWidth, jint boundsHeight, jint renderMode)
+JNIEXPORT jobject JNICALL Java_com_cig_jfreetype_JFreeType_renderWrapped(JNIEnv *env, jobject obj, jstring strFont, jstring strText, jint size, jint boundsWidth, jint boundsHeight)
 {
 	std::string font = JNIHelper::GetString(env, strFont);
 	std::string text = JNIHelper::GetString(env, strText);
@@ -106,7 +152,15 @@ extern "C" JNIEXPORT jobject JNICALL Java_com_cig_jfreetype_JFreeType_renderWrap
 	return javaBitmap;
 }
 
-// static jobject CreateJavaBitmap(Bitmap *bitmap)
-// {
-// 	return NULL;
-// }
+JNIEXPORT jstring JNICALL Java_com_cig_jfreetype_JFreeType_getLogImpl(JNIEnv *env, jobject obj)
+{
+	if (logs.size() > 0)
+	{
+		std::string strLog = logs.at(0);
+		jstring jLog = env->NewStringUTF(strLog.c_str());
+		logs.erase(logs.begin());
+		return jLog;
+	} else return NULL;
+}
+
+}
