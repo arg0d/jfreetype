@@ -131,7 +131,7 @@
 			"file": "src/com/cig/jfreetype/JFreeType.java",
 			"settings":
 			{
-				"buffer_size": 2915,
+				"buffer_size": 3003,
 				"line_ending": "Windows"
 			}
 		},
@@ -139,7 +139,7 @@
 			"file": "src/FreeType.cpp",
 			"settings":
 			{
-				"buffer_size": 4798,
+				"buffer_size": 4829,
 				"line_ending": "Windows"
 			}
 		},
@@ -147,7 +147,7 @@
 			"file": "src/TextRenderer.cpp",
 			"settings":
 			{
-				"buffer_size": 7915,
+				"buffer_size": 7993,
 				"line_ending": "Windows"
 			}
 		},
@@ -155,7 +155,7 @@
 			"file": "src/TextRenderer.h",
 			"settings":
 			{
-				"buffer_size": 2021,
+				"buffer_size": 2055,
 				"line_ending": "Windows"
 			}
 		},
@@ -387,15 +387,15 @@
 					"file": "src/com/cig/jfreetype/JFreeType.java",
 					"settings":
 					{
-						"buffer_size": 2915,
+						"buffer_size": 3003,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2071,
-								2071
+								1925,
+								1925
 							]
 						],
 						"settings":
@@ -404,7 +404,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 810.0,
+						"translation.y": 495.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -414,15 +414,15 @@
 					"file": "src/FreeType.cpp",
 					"settings":
 					{
-						"buffer_size": 4798,
+						"buffer_size": 4829,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								315,
-								315
+								3589,
+								3589
 							]
 						],
 						"settings":
@@ -430,8 +430,8 @@
 							"syntax": "Packages/C++/C++.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.x": 7.0,
+						"translation.y": 1395.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -441,15 +441,15 @@
 					"file": "src/TextRenderer.cpp",
 					"settings":
 					{
-						"buffer_size": 7915,
+						"buffer_size": 7993,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1678,
-								1678
+								5568,
+								5568
 							]
 						],
 						"settings":
@@ -458,7 +458,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 585.0,
+						"translation.y": 3105.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -468,15 +468,15 @@
 					"file": "src/TextRenderer.h",
 					"settings":
 					{
-						"buffer_size": 2021,
+						"buffer_size": 2055,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1693,
-								1693
+								1923,
+								1923
 							]
 						],
 						"settings":
@@ -484,7 +484,7 @@
 							"syntax": "Packages/C++/C++.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 0.0,
+						"translation.x": 433.0,
 						"translation.y": 540.0,
 						"zoom_level": 1.0
 					},

@@ -11,7 +11,7 @@ FT_Face TextRenderer::GetFace(const std::string &font)
 		int error = FT_New_Face( library, font.c_str(), 0, &face );
 
 		if (error) {
-			std::cout << "Could not load face! " << font << std::endl;
+			Log("Could not load face! %s", font.c_str());
 			return NULL;
 		}
 
@@ -88,7 +88,7 @@ Vector2 TextRenderer::Measure(const std::string &font, const std::string &text)
 	return size;
 }
 
-Bitmap* TextRenderer::RenderWrapped(const std::string &font, const std::string &text, int size, Vector2 bounds, int alignment)
+Bitmap* TextRenderer::RenderWrapped(const std::string &font, const std::string &text, int size, Vector2 bounds, int lineSpacing, int alignment)
 {
 	int error = 0;
 
@@ -112,7 +112,7 @@ Bitmap* TextRenderer::RenderWrapped(const std::string &font, const std::string &
 	GlyphCache cache(face);
 
 	std::vector<std::string> lines;
-	WrappedTextMetrics wrappedTextMetrics = WrapLines(lines, bounds, text, &cache);
+	WrappedTextMetrics wrappedTextMetrics = WrapLines(lines, bounds, text, lineSpacing, &cache);
 
 	Bitmap* bitmap = new Bitmap(wrappedTextMetrics.width, wrappedTextMetrics.height);
 
@@ -203,7 +203,7 @@ void TextRenderer::Measure(const std::string &string, TextMetrics *metrics, Glyp
 	metrics->ascender = ascender;
 }
 
-TextRenderer::WrappedTextMetrics TextRenderer::WrapLines(std::vector<std::string> &output, Vector2 bounds, const std::string &text, GlyphCache* cache)
+TextRenderer::WrappedTextMetrics TextRenderer::WrapLines(std::vector<std::string> &output, Vector2 bounds, const std::string &text, int lineSpacing, GlyphCache* cache)
 {
 	TextMetrics spaceMetrics;
 	Measure(" ", &spaceMetrics, cache);
@@ -248,6 +248,7 @@ TextRenderer::WrappedTextMetrics TextRenderer::WrapLines(std::vector<std::string
 	}
 
 	output.push_back(currentLine);
+	maxLineHeight += lineSpacing;
 
 	WrappedTextMetrics wrappedTextMetrics;
 	wrappedTextMetrics.width = bounds.x;

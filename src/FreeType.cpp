@@ -115,11 +115,11 @@ JNIEXPORT jobject JNICALL Java_com_cig_jfreetype_JFreeType_meassure(JNIEnv *env,
 	return javaVector2;	
 }
 
-JNIEXPORT jobject JNICALL Java_com_cig_jfreetype_JFreeType_renderWrapped(JNIEnv *env, jobject obj, jstring strFont, jstring strText, jint size, jint boundsWidth, jint boundsHeight)
+JNIEXPORT jobject JNICALL Java_com_cig_jfreetype_JFreeType_renderWrapped(JNIEnv *env, jobject obj, jstring strFont, jstring strText, jint size, jint boundsWidth, jint boundsHeight, jint lineSpacing)
 {
 	std::string font = JNIHelper::GetString(env, strFont);
 	std::string text = JNIHelper::GetString(env, strText);
-	Bitmap *bitmap = TextRenderer::instance->RenderWrapped(font, text, (float) size, Vector2((int) boundsWidth, (int) boundsHeight), TR_ALIGNMENT_CENTER);
+	Bitmap *bitmap = TextRenderer::instance->RenderWrapped(font, text, (float) size, Vector2((int) boundsWidth, (int) boundsHeight), lineSpacing, TR_ALIGNMENT_CENTER);
 
 	if (bitmap == NULL) {
 		return NULL;

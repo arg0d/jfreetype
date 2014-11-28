@@ -16,9 +16,7 @@ public final class JFreeType {
 
 	private static native Bitmap render(String font, String text, int size);
 	private static native Vector2 measure(String font, String str);
-
-	private static native Bitmap renderWrapped(String font, String text, int size, int width, int height);
- 
+	private static native Bitmap renderWrapped(String font, String text, int size, int width, int height, int lineSpacing);
 	private static native String getLogImpl();
 
 	private static boolean isInstanceCreate = false;
@@ -58,7 +56,7 @@ public final class JFreeType {
 	}
 
 	public Bitmap renderWrapped(JFreeTypeOptions options) {
-		return renderWrapped(options.font, options.text, options.size, options.width, options.height);
+		return renderWrapped(options.font, options.text, options.size, options.width, options.height, options.lineSpacing);
 	}
 
 	public String getLog() {
@@ -72,11 +70,12 @@ public final class JFreeType {
 		freetype.create();
 
 		JFreeTypeOptions options = new JFreeTypeOptions();
-		options.font = "C:/Windows/Fonts/Tahoma.ttf";
+		options.font = "C:/Windows/Fonts/Arial.ttf";
 		options.text = "p you you";
 		options.size = 25;
 		options.width = 70;
 		options.height = 10;
+		options.lineSpacing = 10;
 		Bitmap bitmap = freetype.renderWrapped(options);
 		printBitmap(bitmap);
 
@@ -122,6 +121,7 @@ public final class JFreeType {
 		public int size;
 		public int width;
 		public int height;
+		public int lineSpacing;
 	}
 
 }
