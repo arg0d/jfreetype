@@ -1,6 +1,7 @@
 all: compile
 	
 compile:
+	make -C libs/freetype
 	g++ -Wall -Wl,--kill-at -static-libgcc -static-libstdc++ -Isrc -Ilibs/jni/include -Ilibs/freetype/include -shared -o bin/jfreetype.dll src/FreeType.cpp libs/freetype/objs/freetype.a
 	ant compile
 	java -Djava.library.path=bin -classpath bin com/cig/jfreetype/JFreeType
@@ -15,6 +16,7 @@ android:
 	ndk-build
 
 clean:
+#   Cleaning of FreeType is handled in build.xml
 	ant clean
 
 clean_android:
