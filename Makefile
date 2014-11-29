@@ -1,7 +1,7 @@
 all: compile
 	
 compile:
-	g++ -Wall -Isrc -Ilibs/jni/include -Ilibs/freetype/include -shared -o bin/jfreetype.dll src/FreeType.cpp -Llibs/freetype/objs -lfreetype
+	g++ -Wall -Wl,--kill-at -static-libgcc -static-libstdc++ -Isrc -Ilibs/jni/include -Ilibs/freetype/include -shared -o bin/jfreetype.dll src/FreeType.cpp libs/freetype/objs/freetype.a
 	ant compile
 	java -Djava.library.path=bin -classpath bin com/cig/jfreetype/JFreeType
 
