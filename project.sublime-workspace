@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"Stri",
+				"StringBuilder"
+			],
+			[
 				"creat",
 				"createImpl"
 			],
@@ -123,7 +127,7 @@
 			"file": "Makefile",
 			"settings":
 			{
-				"buffer_size": 434,
+				"buffer_size": 553,
 				"line_ending": "Windows"
 			}
 		},
@@ -131,7 +135,15 @@
 			"file": "src/com/cig/jfreetype/JFreeType.java",
 			"settings":
 			{
-				"buffer_size": 3024,
+				"buffer_size": 3288,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "path.txt",
+			"settings":
+			{
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		},
@@ -200,6 +212,8 @@
 	},
 	"file_history":
 	[
+		"/C/Users/Work/Desktop/jfreetype/class BaseClass",
+		"/C/Users/Work/Desktop/jfreetype/build.xml",
 		"/C/Users/Work/Desktop/jfreetype/hs_err_pid204.log",
 		"/C/Users/Work/Desktop/jfreetype/src/Test/Testing.h",
 		"/C/Users/Work/Desktop/jfreetype/src/Bitmap.cpp",
@@ -210,7 +224,6 @@
 		"/C/Users/Work/Desktop/jfreetype/src/com/cig/jfreetype/Bitmap.java",
 		"/C/Users/Work/Desktop/jfreetype/src/Manifest.h",
 		"/C/Users/Work/Desktop/jfreetype/src/Vector2.h",
-		"/C/Users/Work/Desktop/jfreetype/build.xml",
 		"/C/Users/Work/Desktop/jfreetype/src/com/cig/jfreetype/Vector2.java",
 		"/C/Users/Work/Desktop/jfreetype/jni/Application.mk",
 		"/C/Users/Work/Desktop/jfreetype/libs/freetype/Android.mk",
@@ -280,6 +293,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"File file = new File(\"path.txt\");\n		FileInputStream stream = new FileInputStream(file);",
 			"Measure",
 			"float size",
 			"\n	",
@@ -353,7 +367,7 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -361,15 +375,15 @@
 					"file": "Makefile",
 					"settings":
 					{
-						"buffer_size": 434,
+						"buffer_size": 553,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								422,
-								422
+								496,
+								496
 							]
 						],
 						"settings":
@@ -387,15 +401,15 @@
 					"file": "src/com/cig/jfreetype/JFreeType.java",
 					"settings":
 					{
-						"buffer_size": 3024,
+						"buffer_size": 3288,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1590,
-								1590
+								1960,
+								1960
 							]
 						],
 						"settings":
@@ -404,13 +418,39 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 225.0,
+						"translation.y": 540.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 2,
+					"file": "path.txt",
+					"settings":
+					{
+						"buffer_size": 0,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
 					"file": "src/FreeType.cpp",
 					"settings":
 					{
@@ -421,8 +461,8 @@
 						"selection":
 						[
 							[
-								202,
-								202
+								24,
+								24
 							]
 						],
 						"settings":
@@ -437,7 +477,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 3,
+					"buffer": 4,
 					"file": "src/TextRenderer.cpp",
 					"settings":
 					{
@@ -458,13 +498,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 195.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 5,
 					"file": "src/TextRenderer.h",
 					"settings":
 					{
@@ -491,7 +531,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 6,
 					"file": "src/Manifest.h",
 					"settings":
 					{
@@ -518,7 +558,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 7,
 					"file": "src/jnihelper.cpp",
 					"settings":
 					{
@@ -529,8 +569,8 @@
 						"selection":
 						[
 							[
-								265,
-								265
+								261,
+								261
 							]
 						],
 						"settings":
@@ -588,6 +628,10 @@
 		"selected_items":
 		[
 			[
+				"build.xml",
+				"build.xml"
+			],
+			[
 				"jnihelper",
 				"src/jnihelper.cpp"
 			],
@@ -630,10 +674,6 @@
 			[
 				"vector2.h",
 				"src/Vector2.h"
-			],
-			[
-				"build.xml",
-				"build.xml"
 			],
 			[
 				"textrend",

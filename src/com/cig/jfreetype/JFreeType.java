@@ -6,11 +6,6 @@ import java.lang.IllegalStateException;
 
 public final class JFreeType {
 
-	static {
-
-		System.loadLibrary("jfreetype");
-	}
-
 	private static native boolean createImpl();
 	private static native boolean destroyImpl();
 
@@ -23,9 +18,18 @@ public final class JFreeType {
 
 	private boolean isCreated = false;
 
-	public boolean create() {
+	public boolean create(boolean loadNatives) {
 		if (isCreated) {
 			throw new IllegalStateException("JFreeType object is already initialized!");
+		}
+
+		if (loadNatives) {
+			String architecture = System.getProperty("os.arch");
+			if (architecture.equals("x32") || architecture.equals("x86")) {
+				System.loadLibrary("jfreetype32");
+			} else if (architecture.equals("x64")) {
+				System.loadLibrary("jfreetype64");
+			}
 		}
 
 		if (createImpl()) {
@@ -67,7 +71,8 @@ public final class JFreeType {
 
 		JFreeType freetype = createInstance();
 
-		freetype.create();
+		System.loadLibrary("jfreetype");
+		freetype.create(false);
 
 		JFreeTypeOptions options = new JFreeTypeOptions();
 		options.font = "C:/Windows/Fonts/Arial.ttf";
