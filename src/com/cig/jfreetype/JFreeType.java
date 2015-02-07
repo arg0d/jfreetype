@@ -14,13 +14,20 @@ public final class JFreeType {
 	private static native Bitmap renderWrapped(String font, String text, int size, int width, int height, int lineSpacing);
 	private static native String getLogImpl();
 
-	private static boolean isInstanceCreate = false;
+	private static boolean isInstanceCreated = false;
+	private static boolean isInstanceValid = false;
 
 	private boolean isCreated = false;
 
-	public boolean create(boolean loadNatives) {
+	public JFreeType() {
+		if (!isInstanceValid) {
+			throw new IllegalStateException("Must use JFreeType.createInstance() to create JFreeType instance!");
+		}
+	}
+
+	public boolean initialize(boolean loadNatives) {
 		if (isCreated) {
-			throw new IllegalStateException("JFreeType object is already initialized!");
+			throw new IllegalStateException("JFreeType instance is already initialized!");
 		}
 
 		if (loadNatives) {
@@ -41,7 +48,7 @@ public final class JFreeType {
 
 	public boolean destroy() {
 		if (!isCreated) {
-			throw new IllegalStateException("JFreeType object has not been created yet!");
+			throw new IllegalStateException("JFreeType instance has not been created yet!");
 		}
 
 		if (destroyImpl()) {
@@ -69,10 +76,10 @@ public final class JFreeType {
 
 	public static void main(String[] args) {
 
-		JFreeType freetype = createInstance();
+		JFreeType freetype = JFreeType.createInstance();
 
 		System.loadLibrary("jfreetype");
-		freetype.create(false);
+		freetype.initialize(false);
 
 		JFreeTypeOptions options = new JFreeTypeOptions();
 		options.font = "C:/Windows/Fonts/Arial.ttf";
@@ -114,10 +121,13 @@ public final class JFreeType {
 	* IllegalStateException will be thrown otherwise.
 	*/
 	public static JFreeType createInstance() throws IllegalStateException {
-		if (!isInstanceCreate) {
-			isInstanceCreate = true;
-			return new JFreeType();
-		} else throw new IllegalStateException("");
+		if (!isInstanceCreated) {
+			isInstanceCreated = true;
+			isInstanceValid = true;
+			JFreeType instance = new JFreeType();
+			isInstanceValid = false;
+			return instance;
+		} else throw new IllegalStateException("Only 1 instance of JFreeType can be created!");
 	}
 
 	public static class JFreeTypeOptions {
