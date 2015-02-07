@@ -1,0 +1,24 @@
+<project default="compile">
+
+    <target name="compile">
+    	<mkdir dir="bin"/>
+        <javac target="1.8" source="1.8" includeantruntime="false" srcdir="../../src" destdir="bin"/>
+    </target>
+
+    <target name="build-jar">
+    	<delete file="bin/jfreetype.jar"/>
+		<jar destfile="bin/jfreetype.jar"
+		     basedir="../../bin" >
+		 </jar>
+	</target>
+
+	<target name="clean">
+		<!-- Clean current -->
+		 <delete dir="bin"/>
+		 <mkdir dir="bin"/>
+
+		 <!-- Clean root -->		 
+		 <ant antfile="../../build.xml" target="clean"/>
+	</target>
+
+</project>

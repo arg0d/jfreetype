@@ -1,22 +1,5 @@
-<project default="compile">
-
-    <target name="compile">
-    	<mkdir dir="bin"/>
-        <javac target="1.7" source="1.7" includeantruntime="false" srcdir="src" destdir="bin"/>
-    </target>
-
-    <target name="build-jar">
-    	<delete file="bin/jfreetype.jar"/>
-		<jar destfile="bin/jfreetype.jar"
-		     basedir="bin" >
-		 </jar>
-	</target>
-
+<project>
 	<target name="clean">
-		<!-- Clean JFreeType -->
-		 <delete dir="bin"/>
-		 <mkdir dir="bin"/>
-
 		 <!-- Clean FreeType -->
 		 <delete dir="libs/freetype/objs"/>
 		 <mkdir dir="libs/freetype/objs"/>
