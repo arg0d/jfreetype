@@ -1,9 +1,5 @@
 package com.cig.jfreetype;
 
-import java.lang.reflect.Field;
-import com.cig.jfreetype.Bitmap;
-import java.lang.IllegalStateException;
-
 public final class JFreeType {
 
 	private static native boolean createImpl();
