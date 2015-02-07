@@ -1,8 +1,0 @@
-<project>
-	<target name="clean">
-		 <!-- Clean FreeType -->
-		 <delete dir="libs/freetype/objs"/>
-		 <mkdir dir="libs/freetype/objs"/>
-	</target>
-
-</project>

@@ -13,12 +13,13 @@
 	</target>
 
 	<target name="clean">
-		<!-- Clean current -->
+		<!-- Clean bin -->
 		 <delete dir="bin"/>
 		 <mkdir dir="bin"/>
 
-		 <!-- Clean root -->		 
-		 <ant antfile="../../build.xml" target="clean"/>
+		 <!-- Clean FreeType -->		 
+		 <delete dir="../../libs/freetype/objs"/>
+		 <mkdir dir="../../libs/freetype/objs"/>
 	</target>
 
 </project>
