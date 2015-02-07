@@ -80,7 +80,7 @@ public final class JFreeType {
 		options.size = 25;
 		options.width = 70;
 		options.height = 10;
-		options.lineSpacing = 10;
+		options.lineSpacing = 0;
 		Bitmap bitmap = freetype.renderWrapped(options);
 		printBitmap(bitmap);
 

@@ -22,6 +22,7 @@ public:
 	int 										height;
 	int 										ascender;
 	int 										descender;
+	int 										horiBearingX;
 };
 
 class GlyphCache {

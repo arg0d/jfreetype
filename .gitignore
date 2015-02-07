@@ -3,3 +3,5 @@ libs/freetype/objs/
 project.sublime-project
 project.sublime-workspace
 libs/freetype/config.mk
+build/android/libs
+build/android/bin

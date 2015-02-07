@@ -169,7 +169,7 @@ void TextRenderer::RenderString(Bitmap &bitmap, FT_Face face, const std::string 
 			error = cache->GlyphToBitmap(glyph);
 			if (error == 0)
 			{
-				bitmap.Draw(glyph.ft_bitmapGlyph->bitmap, pen_x + position.GetX(), ascender - glyph.height + glyph.descender + position.GetY());
+				bitmap.Draw(glyph.ft_bitmapGlyph->bitmap, pen_x + position.GetX() + glyph.horiBearingX, ascender - glyph.height + glyph.descender + position.GetY());
 				pen_x += glyph.width;
 			}
 		}
@@ -315,6 +315,7 @@ std::string GlyphCache::GetGlyph(int iCharCode, Glyph* pGlyph)
 		glyph.height = m_Face->glyph->metrics.height >> 6;
 		glyph.ascender = m_Face->glyph->metrics.horiBearingY >> 6;
 		glyph.descender = glyph.height - glyph.ascender;
+		glyph.horiBearingX = m_Face->glyph->metrics.horiBearingX >> 6;
 		m_Cache[iCharCode] = glyph;
 		(*pGlyph) = glyph; // set the output glyph
 		return "";
