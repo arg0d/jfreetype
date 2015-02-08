@@ -52,23 +52,55 @@ bool TextRenderer::Cleanup()
 	return true;
 }
 
-std::string TextRenderer::Render(Bitmap &bitmap, const std::string &font, const std::string &text, int size)
+std::string TextRenderer::Render(Bitmap &bitmap, const std::string &font, const std::string &text, int size, const Vector2 &bounds, int *descender)
 {
 	int error = 0;
 
 	FT_Face face = GetFace(font);
 
-	error = FT_Set_Char_Size(face, size * 64, size * 64, 72, 72);
-	if (error) {
-		return Format("Could not set FreeType char size. Freetype errorCode=%d", error);
-	}
-
 	TextMetrics metrics;
 	GlyphCache cache(face);
-	Measure(text, &metrics, &cache);
-	bitmap.Initialize(metrics.width, metrics.height);
-	RenderString(bitmap, face, text, Vector2(), metrics.ascender);
 
+	while (true)
+	{
+		if (size == 0)
+		{
+			// Since size is 0, just quit, because font is not visible anymore
+			bitmap.Initialize(0, 0);
+			Log("Text: <%s> does not fit!", text.c_str());
+			return "";
+		}
+
+		error = FT_Set_Char_Size(face, size * 64, size * 64, 72, 72);
+		if (error) {
+			return Format("Could not set FreeType char size. Freetype errorCode=%d", error);
+		}
+
+		// Cache needs to be cleared when size of the font changes,
+		// so that glyphs update their metrics.
+		cache.Clear();
+
+		Measure(text, &metrics, cache);
+
+		if (metrics.width <= bounds.x && metrics.height <= bounds.y)
+		{
+			// Text fits within the bounds
+			break;
+		}
+		else
+		{
+			// Text doesn't fit within the bounds, reduce size
+			size--;
+		}
+	}
+
+	bitmap.Initialize(metrics.width, metrics.height);
+	RenderString(bitmap, text, Vector2(), metrics.ascender, cache);
+
+	if (descender != NULL)
+	{
+		(*descender) = metrics.descender;
+	}
 	return "";
 }
 
@@ -81,7 +113,7 @@ Vector2 TextRenderer::Measure(const std::string &font, const std::string &text)
 
 	TextMetrics metrics;
 	GlyphCache cache(face);
-	Measure(text, &metrics, &cache);
+	Measure(text, &metrics, cache);
 	size.x = metrics.width;
 	size.y = metrics.height;	
 
@@ -90,29 +122,43 @@ Vector2 TextRenderer::Measure(const std::string &font, const std::string &text)
 
 Bitmap* TextRenderer::RenderWrapped(const std::string &font, const std::string &text, int size, Vector2 bounds, int lineSpacing, int alignment)
 {
+	std::vector<std::string> words;
+	String_Split(words, text, ' ');
+
 	int error = 0;
-
-	if (library == NULL) {
-		error = FT_Init_FreeType( &library );
-		if ( error )
-		{
-			std::cout << "Could no intialize library" << std::endl;
-			return NULL;
-		}
-	}
-
 	FT_Face face = GetFace(font);
 
-	error = FT_Set_Char_Size(face, 0, size * 64, 72, 72);
-	if (error) {
-		std::cout << "Could not set char size!" << std::endl;
-		return NULL;
-	}
-
 	GlyphCache cache(face);
-
 	std::vector<std::string> lines;
-	WrappedTextMetrics wrappedTextMetrics = WrapLines(lines, bounds, text, lineSpacing, &cache);
+	WrappedTextMetrics wrappedTextMetrics;
+
+	while (true)
+	{	
+		if (size == 0)
+		{
+			return new Bitmap(0, 0);
+		}
+
+		error = FT_Set_Char_Size(face, 0, size * 64, 72, 72);
+		if (error) {
+			Log("TextRenderer::RenderWrapped() - cannot set char size! Returning null");
+			return NULL;
+		}
+
+		// Must reset glyph cache so that glyph metrics reset for new font size
+		cache.Clear();
+		lines.clear();
+		wrappedTextMetrics = WrapLines(lines, bounds, words, lineSpacing, cache);
+
+		if (wrappedTextMetrics.width <= bounds.x && wrappedTextMetrics.height <= bounds.y)
+		{
+			break;
+		}
+		else
+		{
+			size--;
+		}
+	}
 
 	Bitmap* bitmap = new Bitmap(wrappedTextMetrics.width, wrappedTextMetrics.height);
 
@@ -121,7 +167,7 @@ Bitmap* TextRenderer::RenderWrapped(const std::string &font, const std::string &
 	{	
 		std::string str = lines.at(i);
 		TextMetrics metrics;
-		Measure(str, &metrics, &cache);
+		Measure(str, &metrics, cache);
 
 		int horizontalOffset = 0;
 
@@ -141,32 +187,25 @@ Bitmap* TextRenderer::RenderWrapped(const std::string &font, const std::string &
 			Log("Invalid wrapping alignment!");
 		}
 
-		RenderString(*bitmap, face, str, Vector2(horizontalOffset, y), metrics.ascender);
+		RenderString(*bitmap, str, Vector2(horizontalOffset, y), wrappedTextMetrics.lineAscender, cache);
 		y += wrappedTextMetrics.line_height;
 	}
 
 	return bitmap;
 }
 
-void TextRenderer::RenderString(Bitmap &bitmap, FT_Face face, const std::string &text, const Vector2 &position, int ascender, GlyphCache* cache)
+void TextRenderer::RenderString(Bitmap &bitmap, const std::string &text, const Vector2 &position, int ascender, GlyphCache &cache)
 {
-	bool bDeleteCache = false;
-	if (cache == NULL)
-	{
-		cache = new GlyphCache(face);
-		bDeleteCache = true;
-	}
-
 	int error = 0;
 
 	int pen_x = 0;
 	for (unsigned int i = 0; i < text.length(); i++)
 	{
 		Glyph glyph;
-		std::string strError = cache->GetGlyph((int) text.at(i), &glyph);
+		std::string strError = cache.GetGlyph((int) text.at(i), &glyph);
 		if (strError.empty())
 		{
-			error = cache->GlyphToBitmap(glyph);
+			error = cache.GlyphToBitmap(glyph);
 			if (error == 0)
 			{
 				bitmap.Draw(glyph.ft_bitmapGlyph->bitmap, pen_x + position.GetX() + glyph.horiBearingX, ascender - glyph.height + glyph.descender + position.GetY());
@@ -174,48 +213,44 @@ void TextRenderer::RenderString(Bitmap &bitmap, FT_Face face, const std::string 
 			}
 		}
 	}
-
-	if (bDeleteCache)
-	{
-		delete cache;
-	}
 }
 
-void TextRenderer::Measure(const std::string &string, TextMetrics *metrics, GlyphCache* cache)
+void TextRenderer::Measure(const std::string &string, TextMetrics *metrics, GlyphCache &cache)
 {
 	int width = 0;
-	int height = 0;
 	int ascender = 0;
+	int descender = 0;
 
 	for (unsigned int i = 0; i < string.length(); i++) {
 		Glyph glyph;
-		std::string strError = cache->GetGlyph((int) string.at(i), &glyph);
+		std::string strError = cache.GetGlyph((int) string.at(i), &glyph);
 		if (strError.empty())
 		{
 			width += glyph.width;
-			height = std::max(glyph.height + glyph.descender, height);
-			ascender = std::max(glyph.ascender, ascender);
+			ascender = std::max(ascender, glyph.ascender);
+			descender = std::max(descender, glyph.descender);
 		}
 	}
 
 	metrics->width = width;
-	metrics->height = height;
+	metrics->height = ascender + descender;
 	metrics->ascender = ascender;
+	metrics->descender = descender;
 }
 
-TextRenderer::WrappedTextMetrics TextRenderer::WrapLines(std::vector<std::string> &output, Vector2 bounds, const std::string &text, int lineSpacing, GlyphCache* cache)
+TextRenderer::WrappedTextMetrics TextRenderer::WrapLines(std::vector<std::string> &output, Vector2 bounds, const std::vector<std::string> &words, int lineSpacing, GlyphCache &cache)
 {
 	TextMetrics spaceMetrics;
 	Measure(" ", &spaceMetrics, cache);
 	const int spaceWidth = spaceMetrics.width;
+	int maxLineWidth = 0;
 	int maxLineHeight = 0;
-
-	std::vector<std::string> words;
-	String_Split(words, text, ' ');
+	int maxLineAscender = 0;
 
 	std::string currentLine;
 	int width = 0; // loop variable
-	int height = 0; // loop variable
+	int ascender = 0; // loop variable
+	int descender = 0; // loop variable
 	for (unsigned int i = 0; i < words.size(); i++)
 	{
 		std::string word = words.at(i);
@@ -227,11 +262,17 @@ TextRenderer::WrappedTextMetrics TextRenderer::WrapLines(std::vector<std::string
 
 		if (width + metrics.width > bounds.x)
 		{
+// ************************ line has ended. Edit the code below when editing here
 			output.push_back(currentLine);
+			maxLineWidth = std::max(maxLineWidth, width);
+			maxLineHeight = std::max(maxLineHeight, ascender + descender);
+			maxLineAscender = std::max(maxLineAscender, ascender);
+// *************************************************************************************
 
 			currentLine = "";
 			width = 0;
-			height = 0;
+			ascender = 0;
+			descender = 0;
 
 			addSpace = false;
 		}
@@ -243,17 +284,22 @@ TextRenderer::WrappedTextMetrics TextRenderer::WrapLines(std::vector<std::string
 		}
 		currentLine += word;
 		width += metrics.width;
-		height = std::max(height, metrics.height);
-		maxLineHeight = std::max(maxLineHeight, metrics.height);
+		ascender = std::max(ascender, metrics.ascender);
+		descender = std::max(descender, metrics.descender);
 	}
 
+// ************************ the line ended code must be the same as above
 	output.push_back(currentLine);
-	maxLineHeight += lineSpacing;
+	maxLineWidth = std::max(maxLineWidth, width);
+	maxLineHeight = std::max(maxLineHeight, ascender + descender);
+	maxLineAscender = std::max(maxLineAscender, ascender);
+// *************************************************************************
 
 	WrappedTextMetrics wrappedTextMetrics;
-	wrappedTextMetrics.width = bounds.x;
-	wrappedTextMetrics.height = maxLineHeight * output.size();
+	wrappedTextMetrics.width = maxLineWidth;
+	wrappedTextMetrics.height = maxLineHeight * output.size() + lineSpacing;
 	wrappedTextMetrics.line_height = maxLineHeight;
+	wrappedTextMetrics.lineAscender = maxLineAscender;
 	return wrappedTextMetrics;
 }
 
@@ -268,15 +314,7 @@ GlyphCache::GlyphCache(FT_Face face):
 
 GlyphCache::~GlyphCache()
 {
-	TGlyphCache::iterator it = m_Cache.begin();
-	for (; it != m_Cache.end(); it++)
-	{
-		FT_Done_Glyph(it->second.ft_glyph);
-		if (it->second.ft_bitmapGlyph != NULL)
-		{
-			FT_Done_Glyph(reinterpret_cast<FT_Glyph>(it->second.ft_bitmapGlyph));
-		}
-	}
+	Clear();
 }
 
 std::string GlyphCache::GetGlyph(int iCharCode, Glyph* pGlyph)
@@ -346,4 +384,18 @@ int GlyphCache::GlyphToBitmap(Glyph &glyph)
 	}
 
 	return error; // failed
+}
+
+void GlyphCache::Clear()
+{
+	TGlyphCache::iterator it = m_Cache.begin();
+	for (; it != m_Cache.end(); ++it)
+	{
+		FT_Done_Glyph(it->second.ft_glyph);
+		if (it->second.ft_bitmapGlyph != NULL)
+		{
+			FT_Done_Glyph(reinterpret_cast<FT_Glyph>(it->second.ft_bitmapGlyph));
+		}
+	}
+	m_Cache.clear();
 }

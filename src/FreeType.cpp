@@ -4,6 +4,8 @@
 using namespace std;
 
 std::vector<std::string> logs;
+bool instantLoggingEnabled = false;
+
 void Log(const char* format, ...)
 {
 	char buffer[1024];
@@ -12,11 +14,17 @@ void Log(const char* format, ...)
 	vsprintf(buffer, format, args);
 	va_end(args);
 	
-	logs.push_back(std::string(buffer));
-
-	if (logs.size() > 128)
+	if (instantLoggingEnabled)
 	{
-		logs.erase(logs.begin());
+		std::cout << "<JFreeType>: " << buffer << std::endl;
+	}
+	else
+	{
+		logs.push_back(std::string(buffer));
+		if (logs.size() > 128)
+		{
+			logs.erase(logs.begin());
+		}
 	}
 }
 
@@ -49,35 +57,43 @@ JNIEXPORT jboolean JNICALL Java_com_cig_jfreetype_JFreeType_destroyImpl(JNIEnv *
 	return true;
 }
 
-JNIEXPORT jobject JNICALL Java_com_cig_jfreetype_JFreeType_render(JNIEnv *env, jobject obj, jstring strFont, jstring strText, jint size)
+jobject CreateTextMetricsJavaObject(JNIEnv *env, int width, int height, int descender)
 {
-	std::string font = JNIHelper::GetString(env, strFont);
-	std::string text = JNIHelper::GetString(env, strText);
-	
-	Bitmap bitmap;
-	std::string error = TextRenderer::instance->Render(bitmap, font, text, (int) size);
+	jclass textMetricsClass = env->FindClass("com/cig/jfreetype/TextMetrics");
+	jobject javaTextMetrics = JNIHelper::CreateJObject(env, textMetricsClass);
 
-	if (!error.empty())
-	{
-		Log("%s", error.c_str());
-		return NULL;
-	}
+	jfieldID fieldWidth = env->GetFieldID(textMetricsClass, "width", "I");
+	jfieldID fieldHeight = env->GetFieldID(textMetricsClass, "height", "I");
+	jfieldID fieldDescender = env->GetFieldID(textMetricsClass, "descender", "I");
 
+	env->SetIntField(javaTextMetrics, fieldWidth, (jint) width);
+	env->SetIntField(javaTextMetrics, fieldHeight, (jint) height);
+	env->SetIntField(javaTextMetrics, fieldDescender, (jint) descender);
+
+	env->DeleteLocalRef(textMetricsClass);
+	return javaTextMetrics;
+}
+
+jobject CreateBitmapJavaObject(JNIEnv *env, Bitmap &bitmap, int descender)
+{
 	jclass bitmapClass = env->FindClass("com/cig/jfreetype/Bitmap");
 
-	jmethodID bitmapConstructor = env->GetMethodID(bitmapClass, "<init>", "()V");
-	jobject javaBitmap = env->NewObject(bitmapClass, bitmapConstructor);
+	jobject javaBitmap = JNIHelper::CreateJObject(env, bitmapClass);
+	jobject javaTextMetrics = CreateTextMetricsJavaObject(env, bitmap.GetWidth(), bitmap.GetHeight(), descender);
 
 	jfieldID fieldWidth = env->GetFieldID(bitmapClass, "width", "I");
 	jfieldID fieldHeight = env->GetFieldID(bitmapClass, "height", "I");
 	jfieldID fieldPixels = env->GetFieldID(bitmapClass, "pixels", "Ljava/nio/ByteBuffer;");
+	jfieldID fieldTextMetrics = env->GetFieldID(bitmapClass, "textMetrics", "Lcom/cig/jfreetype/TextMetrics;");
 
 	int width = bitmap.GetWidth();
 	int height = bitmap.GetHeight();
 
 	env->SetIntField(javaBitmap, fieldWidth, (jint) width);
-	env->SetIntField(javaBitmap, fieldHeight, (jint) height);	
+	env->SetIntField(javaBitmap, fieldHeight, (jint) height);
+	env->SetObjectField(javaBitmap, fieldTextMetrics, javaTextMetrics);
 
+	// Copy texture data and set the field
 	int length = width * height * 4; 
 	char * temp = new char[length];
 	memcpy(temp, bitmap.GetPixels(), length);
@@ -85,38 +101,45 @@ JNIEXPORT jobject JNICALL Java_com_cig_jfreetype_JFreeType_render(JNIEnv *env, j
 	env->SetObjectField(javaBitmap, fieldPixels, buffer);
 
 	env->DeleteLocalRef(bitmapClass);
+	return javaBitmap;
+}
+
+JNIEXPORT jobject JNICALL Java_com_cig_jfreetype_JFreeType_render(JNIEnv *env, jobject obj, jstring strFont, jstring strText, jint size, jint width, jint height)
+{
+	std::string font = JNIHelper::GetString(env, strFont);
+	std::string text = JNIHelper::GetString(env, strText);
+	Vector2 bounds(width, height);
+
+	Bitmap bitmap;
+	int descender = 0;
+	std::string error = TextRenderer::instance->Render(bitmap, font, text, (int) size, bounds, &descender);
+
+	if (!error.empty())
+	{
+		Log("%s", error.c_str());
+		return NULL;
+	}
+
+	jobject javaBitmap = CreateBitmapJavaObject(env, bitmap, descender);
 
 	return javaBitmap;
 }
 
-JNIEXPORT jobject JNICALL Java_com_cig_jfreetype_JFreeType_meassure(JNIEnv *env, jobject obj, jstring strFont, jstring strText)
+JNIEXPORT jobject JNICALL Java_com_cig_jfreetype_JFreeType_measure(JNIEnv *env, jobject obj, jstring strFont, jstring strText)
 {
 	std::string font = JNIHelper::GetString(env, strFont);
 	std::string text = JNIHelper::GetString(env, strText);
 	
 	Vector2 size = TextRenderer::instance->Measure(font, text);
 
-	jclass vector2Class = env->FindClass("com/cig/jfreetype/Vector2");
+	jobject javaTextMetrics = CreateTextMetricsJavaObject(env, size.x, size.y, 0);
 
-	jmethodID vector2Constructor = env->GetMethodID(vector2Class, "<init>", "(II)V");
-	jobject javaVector2 = env->NewObject(vector2Class, vector2Constructor);
-
-	jfieldID fieldX = env->GetFieldID(vector2Class, "x", "I");
-	jfieldID fieldY = env->GetFieldID(vector2Class, "y", "I");
-
-	int x = size.x;
-	int y = size.y;
-
-	env->SetIntField(javaVector2, fieldX, (jint) x);
-	env->SetIntField(javaVector2, fieldY, (jint) y);	
-
-	env->DeleteLocalRef(vector2Class);
-
-	return javaVector2;	
+	return javaTextMetrics;	
 }
 
 JNIEXPORT jobject JNICALL Java_com_cig_jfreetype_JFreeType_renderWrapped(JNIEnv *env, jobject obj, jstring strFont, jstring strText, jint size, jint boundsWidth, jint boundsHeight, jint lineSpacing)
 {
+
 	std::string font = JNIHelper::GetString(env, strFont);
 	std::string text = JNIHelper::GetString(env, strText);
 	Bitmap *bitmap = TextRenderer::instance->RenderWrapped(font, text, (float) size, Vector2((int) boundsWidth, (int) boundsHeight), lineSpacing, TR_ALIGNMENT_CENTER);
@@ -125,30 +148,9 @@ JNIEXPORT jobject JNICALL Java_com_cig_jfreetype_JFreeType_renderWrapped(JNIEnv 
 		return NULL;
 	}
 
-	jclass bitmapClass = env->FindClass("com/cig/jfreetype/Bitmap");
+	jobject javaBitmap = CreateBitmapJavaObject(env, *bitmap, 0);
 
-	jmethodID bitmapConstructor = env->GetMethodID(bitmapClass, "<init>", "()V");
-	jobject javaBitmap = env->NewObject(bitmapClass, bitmapConstructor);
-
-	jfieldID fieldWidth = env->GetFieldID(bitmapClass, "width", "I");
-	jfieldID fieldHeight = env->GetFieldID(bitmapClass, "height", "I");
-	jfieldID fieldPixels = env->GetFieldID(bitmapClass, "pixels", "Ljava/nio/ByteBuffer;");
-
-	int width = bitmap->GetWidth();
-	int height = bitmap->GetHeight();
-
-	env->SetIntField(javaBitmap, fieldWidth, (jint) width);
-	env->SetIntField(javaBitmap, fieldHeight, (jint) height);	
-
-	int length = width * height * 4; 
-	char * temp = new char[length];
-	memcpy(temp, bitmap->GetPixels(), length);
-	jobject buffer = env->NewDirectByteBuffer(temp, length);
-	env->SetObjectField(javaBitmap, fieldPixels, buffer);
-
-	env->DeleteLocalRef(bitmapClass);
 	delete bitmap;
-
 	return javaBitmap;
 }
 
@@ -161,6 +163,11 @@ JNIEXPORT jstring JNICALL Java_com_cig_jfreetype_JFreeType_getLogImpl(JNIEnv *en
 		logs.erase(logs.begin());
 		return jLog;
 	} else return NULL;
+}
+
+JNIEXPORT void JNICALL Java_com_cig_jfreetype_JFreeType_setInstantLoggingEnabledImpl(JNIEnv *env, jboolean jInstantLoggingEnabled)
+{
+	instantLoggingEnabled = (bool) jInstantLoggingEnabled;
 }
 
 }

@@ -15,5 +15,5 @@ root for that specific platform)
 
 Each platform should clean everything it has generated in "make clean".
 This includes FreeType compilation files, bin files and stuff like that.
-After running "make clean" you should have a clean copy of that platform
+After running "make clean" you should have a clean copy of that platform's
 compilation files.
