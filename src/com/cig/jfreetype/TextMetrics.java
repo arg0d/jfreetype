@@ -1,6 +1,5 @@
 package com.cig.jfreetype;
 
-import java.nio.ByteBuffer;
 
 public class TextMetrics {
 

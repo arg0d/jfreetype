@@ -28,12 +28,8 @@ public final class JFreeType {
 		}
 
 		if (loadNatives) {
-			String architecture = System.getProperty("os.arch");
-			if (architecture.equals("x32") || architecture.equals("x86")) {
-				System.loadLibrary("jfreetype32");
-			} else if (architecture.equals("x64")) {
-				System.loadLibrary("jfreetype64");
-			}
+			String architecture = System.getProperty("sun.arch.data.model");
+			System.loadLibrary("jfreetype" + architecture);
 		}
 
 		if (createImpl()) {
@@ -104,7 +100,6 @@ public final class JFreeType {
 	}
 	
 	public static void main(String[] args) {
-
 		JFreeType freetype = JFreeType.createInstance();
 
 		System.loadLibrary("jfreetype");
