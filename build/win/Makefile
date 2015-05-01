@@ -15,7 +15,7 @@ compile:
 	make -C $(root_dir)libs/freetype
 
 #	Build JFreeType
-	g++ -Wall -Wl,--kill-at -static-libgcc -static-libstdc++ -I$(root_dir)src -I$(root_dir)libs/jni/include -I$(root_dir)libs/freetype/include -shared -o bin/jfreetype.dll $(root_dir)src/FreeType.cpp $(root_dir)libs/freetype/objs/freetype.a
+	g++ -Wall -Wl,--kill-at -static-libgcc -static-libstdc++ -lpthread -L libwinpthread-1.dll -I$(root_dir)src -I$(root_dir)libs/jni/include -I$(root_dir)libs/freetype/include -shared -o bin/jfreetype.dll $(root_dir)src/FreeType.cpp $(root_dir)libs/freetype/objs/freetype.a
 
 #	Compile java code
 	ant compile
