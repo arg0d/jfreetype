@@ -1,0 +1,2 @@
+
+Move .jar creation to /build folder and have all subdirectories to use it.
